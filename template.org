@@ -1,0 +1,35 @@
+* Weekly Call – <2026-04-02 Thu>  :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: 
+:END:
+
+** Agenda
+- [ ] 
+- [ ] 
+
+** Updates
+*** In Progress
+- 
+
+*** Merged / Shipped
+- 
+
+*** Blocked
+- 
+
+** Discussion Notes
+- 
+
+** Decisions
+- 
+
+** Action Items
+| Owner | Task | Due |
+|-------+------+-----|
+|       |      |     |
+
+** Next Call
+- Date: <2026-04-09 Thu>
+- Topics to carry forward:
+  -

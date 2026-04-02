@@ -1,0 +1,76 @@
+* Weekly Call – <2026-04-02 Thu>                                     :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: R27, Francesco Michelli, Johnny Santos and jungly
+:END:
+
+** Agenda
+- [X] Francesco pdm
+  - New detail screen for each config item
+  - Shows the type
+  - Save with ctrl-s
+  - Shows saved
+  - Shows file being editted
+  - No more tmp file
+  - Francesco to send PR with changes
+  - R27 had questions about his PR, which is now overridden by this PR
+- [X] R27 questions
+  - Questions on sv2, coinbase, etc
+- [X] Johnny updates
+  - Gave a talk at ventium
+    - People confused about PPLNS and coinbase
+  - Docker improvements PR merged
+  - Mentioned woxlt's work on IPC for block validations
+- [X] Jungly updates
+  - Updates on sync and validation fixes
+  - See discussion on header first sync and min difficulty
+
+** Updates
+
+*** In Progress
+
+- Francesco: pdm bitcoin conf screen
+- Jungly: Sync fixes for nodes catching up
+- Johnny: Compact blocks work
+
+*** Merged / Shipped
+
+ID    TITLE                                                  BRANCH                                      CREATED AT        
+#460  Improve connection health monitoring                   fix-connection-health-monitoring            about 2 hours ago
+#459  Chain sync fix                                         chain-sync-fixes                            about 6 hours ago
+#458  Remove extraneous config files                         cleanup-configs                             about 10 hours ago
+#457  Fix integration test with validation                   fix-integration-test-with-validation        about 21 hours ago
+#456  Change coinbase nsecs to u64                           change-coinbase-nsecs-to-u64                about 1 day ago
+#455  Use header commitment coinbase when validating shares  use-header-commitment-coinbase-to-validate  about 3 days ago
+#454  Commit to coinbase value and template merkle root      cleanup-share-block-structure               about 4 days ago
+#453  feat: trace api requests                               johnnyasantoss:debug-reqs                   about 5 days ago
+#449  Include transactions in shares cli command output      include-transactions-in-shares-cli-output   about 6 days ago
+#332  feat(docker): improve local cluster                    johnnyasantoss:feat/local-cluster           about 2 months ago
+
+*** Blocked
+
+- Didn't get around to discussing this.
+
+** Discussion Notes
+
+- DoS prevention with header first sync.
+- Prefilled transactions under development on bitcoin.
+- Micro/Nano networks like monero p2pool does.
+- Use github discussions vs discourse. Leaning towards gh discussions.
+- Sharing these notes - on matrix and dump them in github somewhere.
+
+** Decisions
+
+- Use github discussions.
+- Separate repo for meeting notes.
+
+** Action Items
+| Owner  | Task                         | Due |
+|--------+------------------------------+-----|
+| jungly | Start discussions for repo   |     |
+| jungly | Start repo for meeting notes |     |
+
+** Next Call
+- Date: <2026-04-09 Thu>
+- Topics to carry forward:
+  - None yet.
