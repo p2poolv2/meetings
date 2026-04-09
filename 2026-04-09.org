@@ -1,0 +1,74 @@
+* Weekly Call – <2026-04-09 Thu>                                     :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES:
+:END:
+
+** Agenda
+- Jungly update on chain sync and chain context validation.
+- Github discussions active, plus this meeting formality in place.
+
+** Updates
+*** In Progress
+- Raunak - attended bitshala BOSS 2026 summit. Presented p2poolv2.
+  - jungly asked for slides to share on wiki
+  - asked what should he work on next. Francesco and Jungly
+    recommended looking at p2pool config.toml.
+- Francesco
+  - PDM PR to be reviewed and merged
+  - Settings discussions
+    - using directories-rs crate for handling setting file location
+  - wants to switch to bitcoin rpc
+    - this lead to bigger discussion, see below
+- Johnny
+  - Compact blocks
+    - worked on high bandwidth part
+    - testing locally
+    - implementing structs and needed p2p messges
+    - State required
+      - connection type
+      - prefilled transaction
+      - header state for nonce - this lead to a discussion
+- Jungly
+  - Updates on validation progress. See merged for the progress made.
+  - Also talked about the ValidationWorker and OrganiseWorker design.
+
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>$(date -d '7 days ago' +%Y-%m-%d)"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+
+- "468","Add validation of share timestamp","pool2win","2026-04-08T10:19:03Z"
+- "466","Fix write atomicity during sync","pool2win","2026-04-08T08:23:31Z"
+- "464","Wait for parent share blocks during normal runs","pool2win","2026-04-07T13:57:29Z"
+- "463","Fix block fetching logic for reconnects","pool2win","2026-04-04T15:27:37Z"
+- "460","Improve connection health monitoring","pool2win","2026-04-02T13:27:11Z"
+- "459","Chain sync fix","pool2win","2026-04-02T10:31:58Z"
+- "458","Remove extraneous config files","pool2win","2026-04-02T06:04:06Z"
+
+*** Blocked
+--
+
+** Discussion Notes
+- RPC discussions
+  - bitcoin json rpc, electrum vs language bindings
+  - check Core Lightning, LND, ARK implementations and citadel
+    coinswap for what bitcoin rpc
+- Nonce in compact block shortids
+  - Depends on bitcoin block header
+  - Instead use merkle root or nonce
+- Add node vs connect for bitcoin nodes to propagate blocks
+  - connect json rpc api
+
+** Decisions
+- 16 hours maturity window
+
+** Action Items
+| Owner  | Task                        | Due |
+|--------+-----------------------------+-----|
+| jungly | Export template to markdown |     |
+| Johnny | Start first discussion      |     |
+| Johnny | Vertical PRs                |     |
+
+** Next Call
+- Date: <2026-04-09 Thu>
+- Topics to carry forward:
+  -
