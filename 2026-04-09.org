@@ -2,6 +2,7 @@
 :PROPERTIES:
 :PROJECT:  p2poolv2
 :ATTENDEES:
+Francesco Michelli, Johnny Santos, jungly and R27
 :END:
 
 ** Agenda
