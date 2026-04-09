@@ -71,31 +71,9 @@
 
 ## Action Items
 
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
-
-
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Owner</th>
-<th scope="col" class="org-left">Task</th>
-<th scope="col" class="org-left">Due</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">&#xa0;</td>
-<td class="org-left">&#xa0;</td>
-</tr>
-</tbody>
-</table>
+| Owner | Task | Due |
+|:------|:-----|:----|
+|       |      |     |
 
 
 <a id="orgca5e663"></a>
