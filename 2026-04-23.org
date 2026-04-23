@@ -1,0 +1,50 @@
+* Weekly Call – <2026-04-02 Thu>  :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: 
+:END:
+
+** Agenda
+- [ ] R27
+  - PDM update #20 is ready for review.
+  - PDM update #22 is still under draft.
+- [ ] Johnny
+  - Testing P2Party
+  - Breaking down compact block relay implementation
+    - Testing with ventium node
+    - Testnet4
+    - Was reviewing an issue on espminer re coinbase parsing
+    - load_env discussion for config
+- [ ] Francesco
+  - Started review of PR #20.
+  - Will start on RPC.
+- [ ] Jungly
+  - Testnet4 discussion
+  - Should we run a fork rejecting diff 1 blocks?
+
+** Updates
+
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>$(date -d '7 days ago' +%Y-%m-%d)"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+- "495","feat: Add optional CORS support to API server","johnnyasantoss","2026-04-22T19:43:20Z"
+- "494","Restart testnet4","pool2win","2026-04-22T09:52:02Z"
+- "492","Change testnet4 genesis timestamp for asert","pool2win","2026-04-21T20:12:54Z"
+- "491","Switch to per peer task and tower service","pool2win","2026-04-21T15:55:03Z"
+- "487","Fix sync uncles access and timeout issues","pool2win","2026-04-21T09:28:27Z"
+- "486","Dist static files artefact","pool2win","2026-04-18T19:18:17Z"
+- "485","Deployment tweaks","pool2win","2026-04-18T14:34:49Z"
+- "484","Release with testnet4 genesis","pool2win","2026-04-18T04:05:44Z"
+
+** Follow up
+
+- Francesco to send out a write up for JSON-RPC and organise a call
+  
+** Action Items
+| Owner  | Task          | Due |
+|--------+---------------+-----|
+| Jungly | Review PR #20 |     |
+
+
+** Next Call
+- Date:  <2026-04-30 Thu>
+
