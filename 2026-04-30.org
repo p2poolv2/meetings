@@ -1,0 +1,53 @@
+* Weekly Call – <2026-04-30 Thu>                                     :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: Alejandro Ochoa, Johnny Santos, Francesco Michelli, R27, Jungly
+:END:
+
+** Agenda
+
+** Updates
+*** In Progress
+- [X] Alejandro intro - building a bitaxe, learning about protocols, etc.
+- [X] Johnny
+  - ventium node
+  - bugs, finding a bunch of bugs
+    - stratum
+      - error response
+      - d params and nice hash plans for telehash
+    - syncing bugs
+    - compact blocks work waiting for sync
+- [ ] Francesco
+  - Looking in the RPC API as per the call earlier in the week
+    - Coinswap from citadel
+  - Writing down the findings
+- [ ] R27
+  - PDM metrics and logs clarifications
+- [ ] Jungly
+  - Updates on sync progress and plans for next week to fix sync
+
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>$(date -d '7 days ago' +%Y-%m-%d)"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+
+- "509","Send acks for req resp protocols","pool2win","2026-04-30T11:30:29Z"
+- "508","Add handshake and decide on sending getheaders if needed","pool2win","2026-04-30T10:18:48Z"
+- "507","Wait for block data before confirming blocks","pool2win","2026-04-30T08:18:35Z"
+- "504","Increase `is current` time window","pool2win","2026-04-28T19:44:43Z"
+- "501","Set Restart on-failure in sample service file","pool2win","2026-04-28T17:27:15Z"
+- "500","chore: add image tags to locally built images","johnnyasantoss","2026-04-27T01:32:03Z"
+- "499","chore: sync and prune bitcoind configs","johnnyasantoss","2026-04-25T07:13:32Z"
+- "498","fix(grafana): remove hardcoded datasource UIDs and fix provisioning c…","johnnyasantoss","2026-04-27T01:16:36Z"
+- "497","fix: add the static folder to the final img","johnnyasantoss","2026-04-29T04:07:21Z"
+- "496","Fix uncle sync","pool2win","2026-04-28T14:49:51Z"
+
+** Discussion Notes
+- Docker in PDM. Will be nice to have. Who leads this effort though?
+
+** Action Items
+| Owner     | Task               | Due              |
+|-----------+--------------------+------------------|
+| Francesco | Report on RPC      | <2026-05-03 Sun> |
+| Raunak    | Dual boot linux :) | <2026-05-09 Sat> |
+
+** Next Call
+- Date: <2026-05-07 Thu>
