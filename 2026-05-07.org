@@ -1,0 +1,68 @@
+* Weekly Call – <2026-04-02 Thu>  :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: 
+:END:
+
+** Agenda
+- [X] Updates
+  - [X] sync working, lets test and find more breaking corner cases
+  - [X] testnet4
+    - switch to 31117
+    - mine with our bitaxes and rent hashrate
+  - [X] bip54 support
+  - [X] Hydrapool
+    - plan to start working on stratum fixes
+    - number of hashes and leaderboard plans for telehash
+  - [X] Francesco
+    - RPC report
+  - [X] R27
+    - PDM update
+    - Linux dual boot?
+  - [X] Johnny
+
+** Updates
+*** In Progress
+- Johnny
+  - Planning for trip and visa updates
+  - Testnet4 testing
+  - Planning to finish first few messages of compact block p2p
+- Francesco
+  - Completing the document
+  - Identified a set of apis we need
+- R27
+  - Showing shares in PDM with websockets
+
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>$(date -d '7 days ago' +%Y-%m-%d)"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+
+1. "520","Include uncles recursively in share headers response","pool2win","2026-05-06T17:48:02Z"
+2. "519","Periodic getheaders when tip stale","pool2win","2026-05-06T12:34:20Z"
+3. "518","Send getdata to inv sender","pool2win","2026-05-06T10:00:30Z"
+4. "516","Uncle sync refactor","pool2win","2026-05-05T19:43:54Z"
+5. "515","Fix merge operator bug","pool2win","2026-05-04T14:13:15Z"
+6. "514","Add cli commmand to query raw dag","pool2win","2026-05-04T07:10:45Z"
+7. "513","Remove disconnected peer from blockfetcher","pool2win","2026-05-03T09:19:12Z"
+8. "512","Ignore verify_chain from cargo dist","pool2win","2026-05-02T21:29:55Z"
+9. "511","Sync fixes and improvements","pool2win","2026-05-02T20:42:54Z"
+
+
+*** Blocked
+- R27's PR reviews on jungly
+
+** Discussion Notes
+- Do we send inv on headervalid only
+- Possible bug with bitcoin min diff and pool difficulty. Johnny will
+  look.
+
+** Decisions
+
+** Action Items
+| Owner | Task | Due |
+|-------+------+-----|
+|       |      |     |
+
+** Next Call
+- Date: <2026-04-09 Thu>
+- Topics to carry forward:
+  -
