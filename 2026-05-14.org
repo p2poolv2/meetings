@@ -1,0 +1,71 @@
+* Weekly Call – <2026-04-02 Thu>  :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: Johnny, Francesco, Jungly, R27
+:END:
+
+** Agenda
+- [ ] Updates 
+- [ ] Discussions
+
+** Updates
+*** In Progress
+- Francesco
+  - Refining the research on the APIs to use
+  - Break the task into two
+    - Support wallet with electrum
+    - On chain swap
+    - LND chain swap
+    - Ark swap
+- Johnny
+  - Docker CI to build on github
+  - getblocktemplate spam to bitcoind PR is up
+    - switch interval from delayed to missed
+  - bitcoind fork issues
+    - would always just do 1 instead of the difficulty of the epoch
+  - debugging sync
+- R27
+  - websocket integration in draft
+  - Pending #23, #24
+  - College mail
+- Jungly
+  - Hydrapool
+  - Share commitment <-->
+  - described changelog
+
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>$(date -d '7 days ago' +%Y-%m-%d)"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+"539","Update changelog for release 0.10.12","pool2win","2026-05-14T09:34:58Z"
+"538","Clean up verbose debug messages","pool2win","2026-05-14T09:27:46Z"
+"537","Release v0.10.12","pool2win","2026-05-13T11:44:29Z"
+"536","Update mainnet genesis","pool2win","2026-05-13T11:32:22Z"
+"535","Fix docker signet bootstrap script","pool2win","2026-05-13T08:39:33Z"
+"534","Feature gate hydrapool pplns share storage","pool2win","2026-05-12T20:03:39Z"
+"533","Use vec for share duplicate detection","pool2win","2026-05-12T14:04:55Z"
+"532","Limit number of concurrent connections from config","pool2win","2026-05-12T13:12:52Z"
+"531","Add user level share valid total prometheus metric","pool2win","2026-05-12T04:29:37Z"
+"530","Quieten info logging","pool2win","2026-05-12T04:04:00Z"
+"528","Add support for extranonce.subscribe","pool2win","2026-05-10T23:39:40Z"
+"527","Fix unwraps in stratum message handlers","pool2win","2026-05-10T18:59:52Z"
+"526","Add support for user provided start difficulty","pool2win","2026-05-10T09:38:01Z"
+"525","Cleanup uncle traversal","pool2win","2026-05-09T06:48:55Z"
+"524","refactor(stratum): Respond with industry standard error codes and messages","johnnyasantoss","2026-05-10T13:05:30Z"
+"521","Add bip54 support","pool2win","2026-05-09T15:35:03Z"
+
+*** Blocked
+- R27's #23 and #24 on jungly review/merge
+
+** Discussion Notes
+- 
+
+** Decisions
+- 
+
+** Action Items
+| Owner  | Task             | Due |
+|--------+------------------+-----|
+| jungly | review R27's PRs |     |
+
+** Next Call
+- Date: <2026-05-21 Thu>
+- Topics to carry forward:
