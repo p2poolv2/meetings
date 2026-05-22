@@ -1,0 +1,62 @@
+* Weekly Call – <2026-04-02 Thu>  :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: Johnny, Francesco, Jungly
+:END:
+
+** Agenda
+- [ ] Updates
+- [ ] Discussions
+
+** Updates
+*** In Progress
+- Johnny
+  - Continuing with open PRs
+    - Fixing the CI for multi architecure docker images.
+    - QEMU and github actions - things taking time.
+    - One last cache with with gh actions cache.
+    - Optimising for avoiding rebuilds.
+    - ARM emulator performance
+    - Let's cover raspberry pi for native image
+  - Issues with current workflows
+    - using zizmore to find attack vectors for github actions
+  - Dealing with caching issues for docker builds 
+- Francesco
+  - Added the tl;dr
+  - Notes on how to build the API
+- KP
+  - Hydrapool optimisations worked
+  - Chain sync
+    - Extending confirmed bug
+
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>$(date -d '7 days ago' +%Y-%m-%d)"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+
+*** Merged / Shipped
+- "546","Gracefully handle bad submit responses","pool2win","2026-05-19T19:13:27Z"
+- "543","Fix worker metrics","pool2win","2026-05-17T07:44:31Z"
+- "542","Fix prometheus counters","pool2win","2026-05-16T13:10:32Z"
+- "541","Stop parsing txids for each submit","pool2win","2026-05-15T20:23:50Z"
+- "523","fix(gbt): avoid spamming bitcoin node with delayed gbt requests","johnnyasantoss","2026-05-20T07:30:24Z"
+- "505","feat: make sure that the connect btc node is synced","johnnyasantoss","2026-05-20T08:18:04Z"
+
+
+*** Blocked
+- 
+
+** Discussion Notes
+- Pruning
+  - how to figure we are not syncing a bad chain?
+  - use bitcoin height to decide what to prune?
+
+** Decisions
+- 
+
+** Action Items
+| Owner  | Task                      | Due              |
+|--------+---------------------------+------------------|
+| Jungly | Review Francesco's report | <2026-05-27 Wed> |
+
+** Next Call
+- Date: <2026-06-04 Thu>
+- Topics to carry forward:
+  -
