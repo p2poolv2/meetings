@@ -1,0 +1,50 @@
+* Weekly Call – <2026-04-02 Thu>  :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: Johnny Santos, Jungly, R27
+:END:
+
+** Updates
+
+*** In Progress
+
+- Johnny
+  - Ventium meetup
+  - Rebased PR
+  - Started on p2p handshake
+    - Started using connection tracker instead of peer tracker
+  - bitcoin-capnproto
+    - branch on p2poolv2 to use capnproto
+    - build with ipc or rpc?
+    - Jungly: We should build with both and decide depending on config
+
+- R27
+  - On a break
+
+
+- Jungly
+  - TLA+ Spec for pruning
+  
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>$(date -d '7 days ago' +%Y-%m-%d)"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+- "574","Add chain pruning TLA+ spec","pool2win","2026-07-01T12:49:39Z"
+
+*** Blocked
+- 
+
+** Discussion Notes
+- ASERT difficulty adjustment algorithm: We should check if there was
+  a cap on each adjustment
+- Did we code in the block size limit?
+
+** Decisions
+- 
+
+** Action Items
+| Owner  | Task                                    | Due              |
+|--------+-----------------------------------------+------------------|
+| Jungly | Answer the questions in the discussions | <2026-07-09 Thu> |
+
+
+** Next Call
+- Date: <2026-07-09 Thu>
