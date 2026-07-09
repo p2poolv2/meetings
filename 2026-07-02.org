@@ -21,7 +21,6 @@
 - R27
   - On a break
 
-
 - Jungly
   - TLA+ Spec for pruning
   
@@ -33,9 +32,12 @@
 - 
 
 ** Discussion Notes
+
 - ASERT difficulty adjustment algorithm: We should check if there was
   a cap on each adjustment
+  - Yes, there is.
 - Did we code in the block size limit?
+  Yes, we do.
 
 ** Decisions
 - 

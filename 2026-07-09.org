@@ -1,0 +1,53 @@
+* Weekly Call – <2026-07-09 Thu>                                     :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: Jungly, R27, Tobi Adeyemi
+:END:
+
+** Agenda
+- Testnet4
+- Updates
+
+** Updates
+*** In Progress
+- [X] testnet4
+  - Interest keeps coming back, even with testnet5 in the pipeline.
+  - See discussions
+- [X] Johnny - Not much to report.
+- [X] R27
+  - New PR #26
+  - Shows bitcoin chaininfo
+  - Async, TUI doesn't freeze
+- [X] Tobi
+  - Potential videos for mining and p2poolv2
+- [X] Jungly
+
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>$(date -d '7 days ago' +%Y-%m-%d)"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+"582","Update changelog","pool2win","2026-07-04T15:10:37Z"
+"581","Fix sync for low hashrate peers","pool2win","2026-07-04T15:03:29Z"
+"580","Send getheaders on block rcvd with parent missing","pool2win","2026-07-04T06:29:55Z"
+"578","Use fresh time when building work","pool2win","2026-07-04T05:37:47Z"
+"577","Add nightly sim run as an integration test","pool2win","2026-07-03T13:21:50Z"
+"576","Broadcast mined shares after validation","pool2win","2026-07-03T12:14:50Z"
+
+** Discussion Notes
+- testnet4 discussions
+  - Benchmark batmanbytes vs master
+  - Look for the bug in ours
+  - Make a decision
+- Sync all shareheaders
+  - We have around 4GB of header per year
+  - (/ (* 700 120000 4 12 1) 1024.0 1024.0 1024.0) = 3.7GB
+  - Is that too bad?
+
+** Action Items
+| Owner  | Task                                             | Due              |
+|--------+--------------------------------------------------+------------------|
+| Jungly | Benchmark batmanbytes PR                         | <2026-07-16 Thu> |
+| Jungly | Look at bug in ours, rebase it to latest release | <2026-07-16 Thu> |
+
+** Next Call
+- Date: <2026-07-09 Thu>
+- Topics to carry forward:
+  -
