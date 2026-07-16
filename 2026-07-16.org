@@ -1,0 +1,63 @@
+* Weekly Call – <2026-04-02 Thu>  :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: Jungly, Johnny, R27
+:END:
+
+** Agenda
+- [X] Updates
+- [X] Testnet4 plans
+
+** Updates
+*** In Progress
+- Johnny
+  - Finished rebasing compact blocks on top of the connection
+    tracker.
+  - Fixed the PR for reorg configs
+- R27
+  - Rebased two prs
+  - #25 ready for merging
+  - #26 for chain info
+  - #27 bitcoin peer
+  - #28 bitcoin logs
+- Jungly
+  - New grafana dashboard for pool
+  - Plans with hard fork of Testnet4
+
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>$(date -d '7 days ago' +%Y-%m-%d)"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+
+- "600","Record new miner share even if it misses pool diff","pool2win","2026-07-15T10:41:39Z"
+- "598","Update Grafana dash with fixes from server","pool2win","2026-07-15T06:27:30Z"
+- "597","Make new release - 0.13.0","pool2win","2026-07-14T13:36:58Z"
+- "596","Use protocol string instead of magic numbers","pool2win","2026-07-14T10:09:40Z"
+- "595","Add AGENTS.md","pool2win","2026-07-14T07:50:50Z"
+- "594","Add ansible deployment support","pool2win","2026-07-13T22:00:46Z"
+- "593","Ignore bodies below prune depth","pool2win","2026-07-13T07:17:56Z"
+- "591","fix: avoid using logger before usable","johnnyasantoss","2026-07-12T06:07:37Z"
+- "590","Add coinbase pplns depth spend rule","pool2win","2026-07-11T17:12:53Z"
+- "589","Fix pruned validation sync","pool2win","2026-07-11T07:17:54Z"
+- "588","Validate blocks based on PPLNS / prune depths","pool2win","2026-07-10T16:38:09Z"
+- "587","Pruned sync with full header sync","pool2win","2026-07-10T16:01:31Z"
+- "565","fix(ci): self-contained multi-arch manifests","johnnyasantoss","2026-07-15T10:43:32Z"  
+
+*** Blocked
+- 
+
+** Discussion Notes
+- 
+
+** Decisions
+- 
+
+** Action Items
+
+| Owner  | Task                  | Due              |
+|--------+-----------------------+------------------|
+| Jungly | Merge config reorg pr | <2026-07-23 Thu> |
+| Jungly | Merge r27 prs         | <2026-07-23 Thu> |
+
+** Next Call
+- Date: <2026-04-09 Thu>
+- Topics to carry forward:
+  -
