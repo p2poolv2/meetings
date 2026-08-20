@@ -1,0 +1,60 @@
+* Weekly Call – <2026-04-02 Thu>  :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: jungly, johnny, juwon, r27
+:END:
+
+** Agenda
+- [X] Updates
+  - [X] Umbrel
+  - [X] PDM
+  - [X] Sync updates
+
+** Updates
+*** In Progress
+- Umbrel
+- PDM
+- Sync Fixes
+  - Sync fix for consistent pplns
+    - Stalled chain fixed by an attacker fixed by tracking top valid block
+    - Bug found - on reorg we weren't checking blocks with removed
+      outputs and new outputs in a batch
+- Warnings cleanup
+- Pool address prefix hrp - p2pool, tp2pool, rp2pool
+
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>$(date -d '7 days ago' +%Y-%m-%d)"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+- Nothing this week, a big PR being brewed unfortunately for the sync fixes.
+
+** Discussion Notes
+- Umbrel
+  - Config file for umbrel env
+    - config.umbrel.toml
+    - env var overrides as an option?
+      - can we do this in docker compose?
+  - Why it is necessary to fail fast?
+    - Failing with an error on bitcoind ibd in progress
+    - If bitcoind is not available, fail fast
+    - Keep restart on failure for docker/systemd
+- PDM
+  - Systemd vs docker. Systemd might be first easy win and cover most
+    users without requiring a docker setup.
+  - We currenlty are using cargo-dist to distribute p2poolv2 binaries
+    and shell installers. We can extend that to support other
+    installers.
+
+** Decisions
+
+- Umbrel support
+  - Send better error messages on requirements failure, like bitcoind in ibd
+  - Update the systemd conf file to do exponential back-off for restart on failure
+  - Add a docker compose for umbrel, which overrides the env vars for
+    providing the bitcoind url and zmq endpoints details.
+
+- PDM service setup
+- Lean on cargo dist for installers with services
+  - it builds installers for linux and mac/brew systems
+
+** Next Call
+- Date: <2026-08-27 Thu>
+
