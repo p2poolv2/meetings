@@ -1,0 +1,59 @@
+* Weekly Call – <2026-09-03 Thu>                                     :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: Jungly, Johnny, R27, Juwon
+:END:
+
+** Updates from
+- [X] Jungly
+- [X] Johnny
+- [X] R27
+- [X] Juwon
+
+** Updates
+*** In Progress
+- Johnny
+  - Ventium deep dive update
+  - Share market
+    - Good share of the debate was on the market and its side effects
+    - Opportunity cost for large miners to buy shares so they can be
+      in the coinbase
+  - Nested P2Poolv2 nodes
+    - How can this work? Can we make it permissionless for smaller
+      networks to join the larger pools.
+  - Share Commitment
+    - No tx merkle root in the share commitment
+      - Fixed already with the #610
+  - Problem for small miners
+    - Since we use bitcoin address, which is the wrong identity
+    - Should we rethinkg how we use the bitcoin address for pplns
+      accounting.
+  - Some issues with reorgs too, but we will discuss these later
+- R27
+  - systemd service for pdm.
+  - Two configs, by accident? config.toml and a second config file just for the api.
+    - Fixing this in a separate PR.
+  - Started Mastering LN.
+- Juwon
+  - 
+- Jungly
+  - P2Pool address required on pool or as p2p=<address> in stratum password
+  - Make sharechain coinbase unique by committing to weak block's hash
+  - Fork a electrum as it support submarine swaps
+    - Does it do cross chain submarine swap?
+      
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>$(date -d '7 days ago' +%Y-%m-%d)"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+- "620","Add address crate info to agents file","pool2win","2026-09-03T04:27:17Z"
+- "619","Add p2poolv2 address type and use it as share coinbase output ","pool2win","2026-09-02T20:39:01Z"
+- "618","Build all required nightly binaries at the start","pool2win","2026-08-29T13:03:36Z"
+- "617","Failure modes in nightly simulation","pool2win","2026-08-28T20:02:01Z"
+- "610","Fix pplns inconsistency error","pool2win","2026-08-28T14:00:28Z"
+
+
+** Discussion Notes
+- Multiple networks - how can we differentiate addresses?
+  - hrp vs putting network name in address witness program
+
+** Next Call
+- Date: <2026-09-10 Thu>
