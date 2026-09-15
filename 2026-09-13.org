@@ -1,0 +1,142 @@
+* In person meeting - <2026-09-13 Sun>                                              :in-person:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES: jungly, johnnysantoss, msgilligan, lucas, localhost
+:END:
+
+** Agenda
+- Design discussions on sharechain and market place design
+- Blockers
+- Wallet requirements
+- Testnet4 setup
+- Coinpool/statechain discussions
+
+** Discussion Notes
+
+*** Design discussions
+
+We discussed in depth the approach to managing UTXOs and any design
+changes we could bring in to help make the market place design easier
+or pricing model simpler.
+
+**** Unspent Output Age Tracking and Demurrage for UTXO Fungibility
+
+Age is important to track so that miners and market place can
+determine how close the UTXO is to expiry.
+
+The following were discussed for UTXOs age:
+
+1. How can we let miners spend UTXOs and yet retain their "age" so
+   that the age is directly captured in unspent outputs.
+2. Should we introduce demurrage in the UTXOs to solve the problem of
+   tracking UTXO age.
+3. How can we handle change and mixing of UTXOs and still determine
+   the age of the unspent outputs.
+4. If we add demurrage to UTXOs and reduce the amount of output's
+   value that can spent based on its depth, can we make all outputs
+   completely fungible.
+
+We also discussed how we should keep the complications of determine
+price based on depth of an output to the higher layers and not to roll
+them into the sharechain consensus. By making outputs fungible, we
+remove the concept of time or bitcoin block height based "buckets" in
+the marketplace.   
+   
+***** Conclusion
+
+The current implementation determines the age of a coinbase from the
+block height it was created in. We index that in tx metadata and from
+then on we can find the root height of an unspent output as the height
+the coinbase that created the first UTXO in the chain of the UTXOs
+leading to the unspent output. These are indexed and fast to query in
+the store.
+
+For now the design discussions concluded we are OK with the above
+design. We can revisit if we run into some market place design
+requirements that can not be addressed with the current design.
+
+We will revisit the need for removing buckets from marketplace once we
+are in discussion with market maker and fintech people. For the
+moment, jungly backed the idea of keeping buckets in the marketplace
+and keeping the sharechain as simple and as close to the bitcoin
+design as possible.
+
+**** Fee Calculation
+
+The question here is when an output is spent, how do we differentiate
+the fees of an old output vs a new output?
+
+The reasons to differentiate is to discourage a DoS attack by a holder
+of a UTXO as it is going out of the PPLNS window and can't be spent
+anymore.
+
+***** Conclusion
+
+We need to apply a linear increase in fees from depth 1 to depth
+120,960, going from 1 vsat/byte to an amount to be determined. As the
+outputs gets older, it has to pay more fee to create new outputs. This
+avoids a griefing attack by a miner who knows their output will be
+worthless soon.
+
+We acknowldge this will create a double whammy for the miners, as
+being closer to expiry it will fetch a bad price and now even to spend
+it, they lose more "sats" of the share coin to chain fee.
+
+https://github.com/p2poolv2/p2poolv2/issues/646
+
+
+**** Rich List Attack
+
+This is a known attack where a large miners does a sybil attack and
+pretends to be multiple miners - filling all the slots of the bitcoin
+coinbase and then refusing to buy the shares from smaller miners. This
+will result in the death of a specific p2poolv2 instance. This was
+identified first by bluematt in a btcplusplus event in Vienna.
+
+1. Random selection: We discussed bluematt's proposal to try to figure
+   it pseudo random + hashrate weighted selection of miners can
+   work. We don't yet have a full solution where the approach can
+   work.
+
+2. Well known market makers: One more idea discussed was to have a
+   handful of well known market makers who always get a slot in the
+   coinbase. We don't need to change anything in the code, it is more
+   a community communication that these market makers are well known
+   actors, and miners should consider selling shares to them so the
+   pool remains healthy. This does create some sort of semi-trusted
+   third parties, and we are aware of this weakness.
+
+3. Statechains: If we are doing semi trusted third parties what if we
+   go into a state chain based design to enable scalable
+   payouts. Unfortunately, we didn't get around to discussing the ins
+   and outs of the proposal.
+
+4. We also discussed working with the ARK team to figure out if we can
+   come up with some clever new design. Our current interaction with
+   Second has been limited to requesting changes in their tx templates
+   to include a generic HTLC that we can use for swapping sharechain
+   UTXOs with VTXOs.
+   
+https://github.com/p2poolv2/p2poolv2/issues/647
+
+
+***** Conclusion
+
+We need to figure this one out! :)
+
+**** Wallet Requirements Docs
+
+**** Validate Shares With Bitcoin Block Heights
+
+**** Compact Blocks
+
+***** Bitcoin Kernel & Context Free Block Validation
+
+**** Pool Factory
+
+**** 
+
+** Action Items
+
+Issues created as work to do are linked inline with the discussion
+notes above.
