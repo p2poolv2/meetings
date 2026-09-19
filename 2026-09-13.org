@@ -116,25 +116,114 @@ identified first by bluematt in a btcplusplus event in Vienna.
    Second has been limited to requesting changes in their tx templates
    to include a generic HTLC that we can use for swapping sharechain
    UTXOs with VTXOs.
-   
-https://github.com/p2poolv2/p2poolv2/issues/647
 
 
 ***** Conclusion
 
-We need to figure this one out! :)
+Created an issue to decide on the defense against rich list attack. We
+will later add one for implementation as needed: 
+
+https://github.com/p2poolv2/p2poolv2/issues/647
 
 **** Wallet Requirements Docs
 
+We needed to define an MVP for our wallet work. We agreed to limit the
+wallet to construct txs that spend a single input and create a single
+output.
+
+We agreed we will limit the wallet to sharechain only, leaving
+the bitcoin transaction handling to other existing bitcoin wallets.
+
+We also agreed we will use descriptors to wallet interchange.
+
+There is an issue tracking the agreed upon steps to take
+https://github.com/p2poolv2/p2poolv2/issues/648.
+
+**** Wallet Support API
+
+We need to implement bitcoind and electrum compatible API endpoints so
+wallets can be built.
+
+This requires careful schema work and some API selection. Created two issues for this:
+
+https://github.com/p2poolv2/p2poolv2/issues/655 and
+https://github.com/p2poolv2/p2poolv2/issues/656
+
+
 **** Validate Shares With Bitcoin Block Heights
 
-**** Compact Blocks
+Murch pointed out a couple of corner cases. One in chain reorg and
+another for block validation.
 
-***** Bitcoin Kernel & Context Free Block Validation
+The chain reorg concern was that we should be able to reorg a block
+with parent more than one deep. This was recently seen as two depth
+reorgs on bitcoin. Our implementation handles this situation.
+
+The other concern raised has deeper implications, including how we
+handle block template / work propagation in p2poolv2. The question
+raised was: If an adversarial fork of bitcoin keeps mining on
+p2poolv2 - will they receive rewards for work submitted to p2poolv2
+even if their work is based on previous blocks that are not on the
+bitcoin chain anymore? During the discussion we realised we need to
+address this and also need to document it in detail so we can get
+feedback.
+
+We discussed a solution where we invalidate share blocks that have
+bitcoin previous block hash not reachable from the current tip. This
+would mean the work submitted for adversarial bitcoin chain will be
+marked invalid on p2poolv2 and therefore won't receive any reward from
+p2poolv2.
+
+There are some details to think through here and also to analyse how
+the solution might circumvent the need for full bitcoin block template
+/ work propagation in p2poolv2 to validate share blocks. Therefore I
+have created two issues here. One to document the the solution and
+it's implication in the context of share chain validation and second
+to implement the solution.
+
+https://github.com/p2poolv2/p2poolv2/issues/652
+https://github.com/p2poolv2/p2poolv2/issues/653
+
+
+**** Compact Blocks, Bitcoin Kernel & Context Free Block Validation
+
+Questions were raised if we need to continue implementing compact
+block propagation for bitcoin template / work. The idea of using
+p2pool classic's approach to propagate txs sets and txs set deltas for
+synchronising the validation states was discussed, but not fully
+considered. The question of if we need to run full bitcoin block
+validation itself became more central. It was pointed out that there
+is no API to ask Core to only validate a block, or a compact block,
+without asking it to try and advance the chain using
+submitblock. Using submit block for validation of weak blocks will
+probably stop at PoW check and won't run all the validations [we
+should check this].
+
+Another idea discussed was to use bitcoin kernel to run context free
+validation, but that still means we need to rehydrate compact blocks
+in p2poolv2 layer, which means replicating bitcoin mempool in
+p2poolv2. Some were against inheriting so much complexity and a big
+potential source of consensus discrepancies.
+
+Meanwhile it was agreed we should target compact block support for
+share block propagation. It was pointed this is an optimisation that
+we probably don't need so early in the project. As a reminder, our
+blocks are limited to 200kB.
+
+We already have issues and draft PRs to address compact blocks for
+bitcoin. Depending on 652's conclusion, we will need to revisit
+these. No new issues created here.
+
+I'll reasses how far along is the implementation of compact blocks for
+share chain and depending on the time already spent make a call on if
+we continue now or start later.
 
 **** Pool Factory
 
-**** 
+Sean presented the idea of using a pool factory to manage payouts for
+miners. I don't have the details here, but there were some cool
+approaches Sean was thinking of taking. Sean plans to write them down,
+so we can discuss them again once the structures are more clear.
 
 ** Action Items
 
