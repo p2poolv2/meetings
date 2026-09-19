@@ -225,6 +225,21 @@ miners. I don't have the details here, but there were some cool
 approaches Sean was thinking of taking. Sean plans to write them down,
 so we can discuss them again once the structures are more clear.
 
+**** Testnet4
+
+The idea of point some hashrate to testnet4 mining through p2poolv2
+was discussed. It was pointed out that it was a way to draw attention
+to our work at the same time show how permissionless mining can be
+through p2poolv2.
+
+***** Conclusion
+
+We should prepare some p2poolv2 nodes with the Core patch by
+batmanbytes and point some hashrate to it. There were some volunteers
+in the room willing to help, so we should be able to do something.
+
+https://github.com/p2poolv2/p2poolv2/issues/657
+
 ** Action Items
 
 Issues created as work to do are linked inline with the discussion
