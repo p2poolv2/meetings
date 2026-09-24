@@ -23,10 +23,11 @@
 - "664","Track known block hashes in block fetcher","pool2win","2026-09-21"
 - "663","Dense height clean now clears BlockValid blocks too","pool2win","2026-09-21"
 
-*** New PRs Opened
+*** New PRs Opened / Pending Reviews
 - "662","Shrink bitcoin's debug.log file on restarts","johnnyasantoss","open"
 - "659","ci: bump the actions group across 1 directory with 4 updates","dependabot","open"
 - "658","deps: bump the cargo-minor-patch group across 1 directory with 2 updates","dependabot","open"
+- "628","Adds a native Ansible role for deploying Grafana + Prometheus, and adds Arch Linux support to the nginx role. - #628","juwon","open"
 
 *** New Issues
 - From the in person meeting
