@@ -5,29 +5,31 @@
 :END:
 
 ** Agenda
-- [ ] Release 0.15.3 (#665) and block fetcher / store fixes
+- [X] Release 0.15.3 (#665) and block fetcher / store fixes
   - Issue came from flakey network connection and not so robust libp2p code to handle it.
   - Had to clear bad shares from production node to sync local node
-- [ ] Recap of in person meeting (2026-09-13) and the issues created from it
-  - [ ] wallets
-  - [ ] api needed for wallets
-  - [ ] Paused compact block development pending docs explaining why we don't need them.
+- [X] Recap of in person meeting (2026-09-13) and the issues created from it
+  - [X] wallets
+  - [X] api needed for wallets
+  - [X] Paused compact block development pending docs explaining why we don't need them.
+  - [X] tx relay for shareblocks
 - Go through Updates
 
 ** Updates
 
 # gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>=2026-09-10"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
-*** Merged / Shipped
+*** Merged
 - "669","Validate on resume start","pool2win","2026-09-24"
 - "665","Release 0.15.3","pool2win","2026-09-21"
 - "664","Track known block hashes in block fetcher","pool2win","2026-09-21"
 - "663","Dense height clean now clears BlockValid blocks too","pool2win","2026-09-21"
+- "659","ci: bump the actions group across 1 directory with 4 updates","dependabot","open"
+- "658","deps: bump the cargo-minor-patch group across 1 directory with 2 updates","dependabot","open"
 
 *** New PRs Opened / Pending Reviews
 - "662","Shrink bitcoin's debug.log file on restarts","johnnyasantoss","open"
-- "659","ci: bump the actions group across 1 directory with 4 updates","dependabot","open"
-- "658","deps: bump the cargo-minor-patch group across 1 directory with 2 updates","dependabot","open"
 - "628","Adds a native Ansible role for deploying Grafana + Prometheus, and adds Arch Linux support to the nginx role. - #628","juwon","open"
+  - I want to test it locally, that is why the delay
 
 *** New Issues
 - From the in person meeting
@@ -35,7 +37,6 @@
   - #647 Design defence against rich list attack
   - #652 Document share block validation to check bitcoin previous blockhash
   - #653 Implement the share validation based on bitcoin previous block hash checks
-  - #654 Assess compact block progress for share chain
   - #657 Setup Testnet4 with small hashrate pointed to a patched Core
 - Wallet
   - #648 Initial wallet implementation
