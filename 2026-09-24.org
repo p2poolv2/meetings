@@ -1,0 +1,84 @@
+* Weekly Call – <2026-09-24 Thu>                                                     :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES:
+:END:
+
+** Agenda
+- [ ] Release 0.15.3 (#665) and block fetcher / store fixes
+  - Issue came from flakey network connection and not so robust libp2p code to handle it.
+  - Had to clear bad shares from production node to sync local node
+- [ ] Recap of in person meeting (2026-09-13) and the issues created from it
+  - [ ] wallets
+  - [ ] api needed for wallets
+  - [ ] Paused compact block development pending docs explaining why we don't need them.
+- Go through Updates
+
+** Updates
+
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>=2026-09-10"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+- "669","Validate on resume start","pool2win","2026-09-24"
+- "665","Release 0.15.3","pool2win","2026-09-21"
+- "664","Track known block hashes in block fetcher","pool2win","2026-09-21"
+- "663","Dense height clean now clears BlockValid blocks too","pool2win","2026-09-21"
+
+*** New PRs Opened
+- "662","Shrink bitcoin's debug.log file on restarts","johnnyasantoss","open"
+- "659","ci: bump the actions group across 1 directory with 4 updates","dependabot","open"
+- "658","deps: bump the cargo-minor-patch group across 1 directory with 2 updates","dependabot","open"
+
+*** New Issues
+- From the in person meeting
+  - #646 Apply a linear increase in fees from depth 1 to depth 120,960
+  - #647 Design defence against rich list attack
+  - #652 Document share block validation to check bitcoin previous blockhash
+  - #653 Implement the share validation based on bitcoin previous block hash checks
+  - #654 Assess compact block progress for share chain
+  - #657 Setup Testnet4 with small hashrate pointed to a patched Core
+- Wallet
+  - #648 Initial wallet implementation
+  - #649 Generate, import and export key materials
+  - #650 Show balance and tx history
+  - #651 Build, sign and submit txs
+  - #655 Add bitcoin json compatible API support for wallet implementation
+  - #656 Add electrum compatible API support for wallet implementation
+- Juwon
+  - #660 p2poolv2 explorer/dashboard
+  - #661 Fuzz / property-based testing
+  - #666, #667 closed (umbrel-dev DNS issue, tracking issue)
+
+*** Discussions
+- #668 Multi-network P2Poolv2 – parallel and nested share chains to serve
+  miners across a ~400:1 hashrate range (johnnyasantoss, 2026-09-22)
+
+*** PDM (p2poolv2/pdm)
+- Merged: #31, #32, #33
+- New PRs Opened
+  - "35","(WIP)- P2poolv2 memory/storage usage view","R27-pixel","draft"
+- Open PRs awaiting review
+  - "34","feat: add P2Poolv2 systemd service controls","R27-pixel","open"
+- Merged PRs
+  - "33","Fix duplicate config","R27-pixel","open"
+  - "32","Refactor: Remove unused LN and Shares Market features","R27-pixel","open"
+  - "31","Refactor: Simplify Bitcoin Core integration","R27-pixel","open"
+- New Issues: none
+
+*** Blocked
+-
+
+** Discussion Notes
+-
+
+** Decisions
+-
+
+** Action Items
+| Owner | Task | Due |
+|-------+------+-----|
+|       |      |     |
+
+** Next Call
+- Date: <2026-10-01 Thu>
+- Topics to carry forward:
+  -
