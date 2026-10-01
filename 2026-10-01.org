@@ -8,16 +8,16 @@
 - [ ] Go through Updates
 - [ ] #628 Ansible role for Grafana + Prometheus, Arch support for nginx
   (juwon) – still pending local test from last week
-- [ ] Compact blocks – status of the docs explaining why we don't need them
 - [ ] Follow-up on 2026-09-13 in person meeting issues (#646, #647, #652,
   #653, #657 testnet4) and wallet issues (#648–#651, #655, #656)
 - [ ] Older open PRs – triage/close stale ones (#621, #609, #606, #605, #424,
   #359, #356, #355, #137, #73)
 - [ ] PDM – go through PDM updates below
+- [ ] New website is up https://p2poolv2.org
 
 ** Updates
 *** In Progress
--
+- Docs initial draft missing last couple of sections.
 
 # gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>=2026-09-24"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
 *** Merged / Shipped
