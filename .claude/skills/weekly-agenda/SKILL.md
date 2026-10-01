@@ -39,9 +39,33 @@ gh -R $R release list -L 3
 gh api graphql -f query='{repository(owner:"p2poolv2",name:"p2poolv2"){discussions(first:15,orderBy:{field:UPDATED_AT,direction:DESC}){nodes{number title createdAt updatedAt author{login}}}}}'
 ```
 
-Keep discussions created or updated since `S`. Skim bodies (`gh api
-repos/$R/discussions/<n> --jq .body`, `gh pr view <n>`) only as needed to write
-a one-line summary.
+Keep discussions created or updated since `S`.
+
+**Dedupe against the previous notes.** The window is inclusive of `S` so that
+activity after last week's call is caught, which means items from before the
+call on day `S` are already recorded. Grep the previous file for each number
+(`"num"` or `#num`, in the matching repo's section) and:
+- drop it if it's already listed with the same status (e.g. merged then and
+  merged now, closed issue already noted, discussion with no new comments);
+- keep it if its status changed (e.g. open last week → merged now), with a
+  sub-bullet saying so;
+- for PRs still open and already listed, keep them under "Open PRs awaiting
+  review" marked `(carried over)`, summarising only what's new since `S`.
+
+For every PR, issue and discussion that will be listed under Updates (both
+repos), read its body *and* its conversation so you can summarise it — what it
+does/why, plus where the review or discussion stands:
+
+```sh
+gh -R $R pr view <n> --json body,comments,reviews \
+  --jq '.body, (.comments[]|select(.author.login!="codecov")|.author.login+": "+.body), (.reviews[]|select(.body!="")|.author.login+" "+.state+": "+.body)'
+gh api repos/$R/pulls/<n>/comments --jq '.[]|.user.login+" "+.path+": "+.body'   # inline review comments
+gh -R $R issue view <n> --json body,comments,stateReason
+gh api graphql -f query='{repository(owner:"p2poolv2",name:"p2poolv2"){discussion(number:<n>){body comments(first:50){nodes{author{login} body}}}}}'
+```
+
+For dependabot PRs just note the bumped packages. Skip codecov/bot noise, but
+do note the outcome of Copilot reviews (e.g. "all items addressed").
 
 ## 3. Write the agenda
 
@@ -55,13 +79,21 @@ a one-line summary.
     dependabot PRs as `dependabot`.
   - `*** New Issues` — `- #num title`, grouped by theme or author (e.g. wallet,
     from in-person meeting, contributor name). Note issues closed in the window.
-  - `*** Discussions` — `- #num title – one line summary (author, date)`.
+  - `*** Discussions` — `- #num title (author, date)`.
+  - Under every PR, issue and discussion entry (including closed issues and
+    the PDM section) add indented `  - ` sub-bullets summarising the body and
+    the comments/review: what and why, open questions, who said what, current
+    status / next step. Keep it to 1–4 short bullets, wrapped at ~78 cols.
 - Add a `*** PDM (p2poolv2/pdm)` section before `*** Blocked` with: Merged,
   New PRs Opened, Open PRs awaiting review, New Issues (CSV style, "none" if empty).
-- Fill `** Agenda` with `- [ ]` items: releases, PRs needing review, notable
-  discussions, themed issue groups, carried-forward topics, and per-contributor
-  items. Reference issue/PR numbers. End with a `- [ ] PDM` item listing its
-  open PRs (`#num title (author, note)`) and a one-line status.
+- Fill `** Agenda` with `- [ ]` items, starting with `- [ ] Go through
+  Updates`. **Do not repeat anything listed under Updates** (merged PRs, new
+  PRs, new/closed issues, discussions, PDM items) — those are covered by going
+  through Updates and repeating them is confusing. The agenda is only for
+  things not in Updates: carried-forward topics, open questions from earlier
+  meetings, older open PRs still waiting on review/action, follow-ups on
+  issue groups from earlier meetings, stale-PR triage. End with
+  `- [ ] PDM – go through PDM updates below`.
 - Leave Discussion Notes, Decisions, Action Items, Blocked for the meeting.
 - Preserve anything the user already wrote in the file; merge, don't clobber.
 

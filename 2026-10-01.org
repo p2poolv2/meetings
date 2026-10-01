@@ -1,0 +1,100 @@
+* Weekly Call – <2026-10-01 Thu>  :weekly:
+:PROPERTIES:
+:PROJECT:  p2poolv2
+:ATTENDEES:
+:END:
+
+** Agenda
+- [ ] Go through Updates
+- [ ] #628 Ansible role for Grafana + Prometheus, Arch support for nginx
+  (juwon) – still pending local test from last week
+- [ ] Compact blocks – status of the docs explaining why we don't need them
+- [ ] Follow-up on 2026-09-13 in person meeting issues (#646, #647, #652,
+  #653, #657 testnet4) and wallet issues (#648–#651, #655, #656)
+- [ ] Older open PRs – triage/close stale ones (#621, #609, #606, #605, #424,
+  #359, #356, #355, #137, #73)
+- [ ] PDM – go through PDM updates below
+
+** Updates
+*** In Progress
+-
+
+# gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>=2026-09-24"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+*** Merged / Shipped
+- "671","Use candidate tip for header sync","pool2win","2026-09-24"
+  - Restarts no longer re-sync headers from genesis; header sync continues
+    from the highest known header.
+- "670","deps: bump the cargo-minor-patch group across 1 directory with 3 updates","dependabot","2026-09-26"
+  - clap, reqwest, rand
+- "662","Shrink bitcoin's debug.log file on restarts","johnnyasantoss","2026-09-26"
+  - Was pending review last week.
+  - debug.log grew huge in local docker testing; keep only the latest logs.
+
+*** New PRs Opened
+- "675","ci: bump taiki-e/install-action from 2.87.17 to 2.87.20 in the actions group","dependabot","open"
+- "674","deps: bump the cargo-minor-patch group with 2 updates","dependabot","open"
+  - config, thiserror
+- "673","Add networks.rs to distinguish P2Pool from Bitcoin networks","msgilligan","draft"
+  - Adds P2PoolNetwork and an InterNetwork sum type (Bitcoin or P2Pool
+    network, e.g. for parsing addresses), following rust-bitcoin 0.33.
+  - pool2win review: bound to one p2poolv2 instance per bitcoin network;
+    questions whether InterNetwork is needed since balances can be tracked by
+    address type + bitcoin network; suggests traits for shared behaviour and a
+    new network type for v5 rather than a version field.
+  - msgilligan: InterNetwork is only for places that accept either type,
+    trait w.i.p. exists; config hrp check is an artefact of existing code,
+    will revisit in next pass. Relates to discussion #668.
+- "672","Use BIP323 version mask for nVersion rolling","johnnyasantoss","open"
+  - Follows current best practice for more version rolling space (Bitcoin
+    Core #34779, backported to 30.x/31.x; BIPs #2116; ESP-Miner).
+  - pool2win to test locally with a bitaxe; asked if author tested with one.
+
+*** New Issues
+- No new issues
+- Closed: #654 Assess compact block progress for share chain
+  - Closed as completed: compact block development paused pending docs
+    explaining why we won't need them (from 2026-09-13 meeting).
+
+*** Discussions
+- No new or updated discussions
+
+*** PDM (p2poolv2/pdm)
+- Merged: none
+- New PRs Opened: none
+- Open PRs awaiting review
+  - "34","feat: add P2Poolv2 systemd service controls","R27-pixel","open" (carried over)
+    - User-level templated p2poolv2@.service, instance derived from config
+      filename (config-signet.toml → p2poolv2@signet); start/stop/restart/
+      status via systemctl --user; P2Poolv2 keeps running after PDM exits.
+    - Copilot review items all addressed on 2026-09-27: unix-gated tests,
+      abort stale websocket task, IPv6 host bracketing, async cached status,
+      Running/Stopped/Unavailable/Unknown states. README update deferred to a
+      separate PR. Ready for maintainer review.
+  - "35","(WIP)- P2poolv2 memory/storage usage view","R27-pixel","draft" (carried over)
+    - Live RSS memory via systemd MemoryCurrent in System tab; disk usage in
+      Storage tab. Kept in draft until #34 merges, cleanup and coverage done.
+- New Issues
+  - #36 P2Poolv2 installation and systemd setup (R27-pixel)
+    - During PDM setup, detect an existing P2Poolv2 release or download a
+      selected GitHub release, install the systemd user service template and
+      configure the instance. Note: user service stops on logout. R27-pixel
+      asked pool2win for feedback on scope.
+
+*** Blocked
+-
+
+** Discussion Notes
+-
+
+** Decisions
+-
+
+** Action Items
+| Owner | Task | Due |
+|-------+------+-----|
+|       |      |     |
+
+** Next Call
+- Date: <2026-10-08 Thu>
+- Topics to carry forward:
+  -
