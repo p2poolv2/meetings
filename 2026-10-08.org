@@ -25,64 +25,64 @@
 
 # gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>=2026-10-01"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
 *** Merged / Shipped
+
+**** Share chain work
+- "695","Share identity binding using midstate trick from original p2pool","pool2win","2026-10-08"
+  - Fixes a DoS where attackers could build many share headers for one found
+    share and flood peers' header queues; sha256 midstate trick limits one
+    bitcoin PoW to one share header. PoW check itself was already correct.
+  - Changes share header and block formats → requires a chain reset (no
+    migration for testnet4). Scheme documented at
+    https://docs.p2poolv2.org/architecture/share_commitment.html
+- "691","Move share commitment to share header","pool2win","2026-10-07"
+  - Share commitment was in the bitcoin coinbase scriptSig, making the share
+    blockhash malleable; now in the share header using the p2pool midstate
+    trick. Some share header fields still not committed to in the coinbase –
+    tightened further in #695.
+- "689","Search highest work valid block as mining base","pool2win","2026-10-06"
+  - Mining base search was over all !Invalid blocks (attackable with non-PoW
+    headers, long chains needing arbitrary caps); now limited to BlockValid
+    blocks with valid PoW.
+- "683","Handle peer liveness and recovery","pool2win","2026-10-05"
+  - Explicit ping-failure handling (libp2p no longer does it), per-peer
+    connection count tracking to stop flaky peers reconnecting, close idle
+    connections, connection metrics for grafana, handshake fix so branches
+    with different tips can sync.
+- "682","Refactor node actor select switch","pool2win","2026-10-05"
+  - Replaces big dispatch table that caused backpressure from slow jobs, and
+    the loop sending swarm events to itself (potential deadlocks). Cleaner
+    shutdown with named tokio tasks and JoinSets.
+
+**** Dependencies PRs
+- "693","bump uint to 0.10.2, remove \"allow deprecated\" in pool_difficulty.rs","msgilligan","2026-10-08"
+  - uint 0.10.2 fixes the deprecation warning, so the temporary
+    `allow(deprecated)` added in #681 is removed. Supersedes dependabot #686.
+- "685","Add dependabot cooldown","pool2win","2026-10-05"
+  - Too many tiny patch-update PRs from dependabot.
+- "684","deps: bump the cargo-minor-patch group with 2 updates","dependabot","2026-10-05"
+  - config, tokio-test
+- "681","Pin the Rust toolchain to 1.99.0 for CI and development","pool2win","2026-10-02"
+  - rust-toolchain.toml said `stable`, so CI ran newest stable; 1.99 flagged
+    uint macro deprecations and failed clippy on every PR. Pinned 1.99.0 in
+    toolchain, workflows and Docker builder.
+  - johnnyasantoss suggested pinning sim-nightly too and running zizmor
+    (static analysis for CI hardening); pool2win: worth doing, later.
+- "675","ci: bump taiki-e/install-action from 2.87.17 to 2.87.22 in the actions group across 1 directory","dependabot","2026-10-02"
+  - Was open last week.
+- "674","deps: bump the cargo-minor-patch group with 2 updates","dependabot","2026-10-02"
+  - config, thiserror. Was open last week.
+
+**** Cleanup
+- "694","README: add note about using `just preflight`.","msgilligan","2026-10-08"
+- "690","Modify Dockerfile to copy p2poolv2_wallet","RandyMcMillan","2026-10-07"
+  - Docker build broke after the p2poolv2_address → p2poolv2_wallet rename.
+- "687","Add .rs to .gitattributes","pool2win","2026-10-05"
+  - GitHub was detecting .rs as RenderScript.
+- "680","lib.rs: \"Sharechain\" instead of \"Share chain\" in comment","msgilligan","2026-10-07"
+  - Started as a CI test after #679 failed (toolchain issue fixed by #681).
+- "679","Rename crate p2poolv2_wallet from p2poolv2_address","msgilligan","2026-10-03"
 - "692","p2poolv2_wallet: update the package name/description to match the recent directory rename.","msgilligan","2026-10-07"
   - Follow-up to #679, which had only moved the directory.
-
-- Share chain work
-  - "695","Share identity binding using midstate trick from original p2pool","pool2win","2026-10-08"
-    - Fixes a DoS where attackers could build many share headers for one found
-      share and flood peers' header queues; sha256 midstate trick limits one
-      bitcoin PoW to one share header. PoW check itself was already correct.
-    - Changes share header and block formats → requires a chain reset (no
-      migration for testnet4). Scheme documented at
-      https://docs.p2poolv2.org/architecture/share_commitment.html
-  - "691","Move share commitment to share header","pool2win","2026-10-07"
-    - Share commitment was in the bitcoin coinbase scriptSig, making the share
-      blockhash malleable; now in the share header using the p2pool midstate
-      trick. Some share header fields still not committed to in the coinbase –
-      tightened further in #695.
-  - "689","Search highest work valid block as mining base","pool2win","2026-10-06"
-    - Mining base search was over all !Invalid blocks (attackable with non-PoW
-      headers, long chains needing arbitrary caps); now limited to BlockValid
-      blocks with valid PoW.
-  - "683","Handle peer liveness and recovery","pool2win","2026-10-05"
-    - Explicit ping-failure handling (libp2p no longer does it), per-peer
-      connection count tracking to stop flaky peers reconnecting, close idle
-      connections, connection metrics for grafana, handshake fix so branches
-      with different tips can sync.
-  - "682","Refactor node actor select switch","pool2win","2026-10-05"
-    - Replaces big dispatch table that caused backpressure from slow jobs, and
-      the loop sending swarm events to itself (potential deadlocks). Cleaner
-      shutdown with named tokio tasks and JoinSets.
-
-- Dependencies PRs      
-  - "693","bump uint to 0.10.2, remove \"allow deprecated\" in pool_difficulty.rs","msgilligan","2026-10-08"
-    - uint 0.10.2 fixes the deprecation warning, so the temporary
-      `allow(deprecated)` added in #681 is removed. Supersedes dependabot #686.
-  - "685","Add dependabot cooldown","pool2win","2026-10-05"
-    - Too many tiny patch-update PRs from dependabot.
-  - "684","deps: bump the cargo-minor-patch group with 2 updates","dependabot","2026-10-05"
-    - config, tokio-test
-  - "681","Pin the Rust toolchain to 1.99.0 for CI and development","pool2win","2026-10-02"
-    - rust-toolchain.toml said `stable`, so CI ran newest stable; 1.99 flagged
-      uint macro deprecations and failed clippy on every PR. Pinned 1.99.0 in
-      toolchain, workflows and Docker builder.
-    - johnnyasantoss suggested pinning sim-nightly too and running zizmor
-      (static analysis for CI hardening); pool2win: worth doing, later.
-  - "675","ci: bump taiki-e/install-action from 2.87.17 to 2.87.22 in the actions group across 1 directory","dependabot","2026-10-02"
-    - Was open last week.
-  - "674","deps: bump the cargo-minor-patch group with 2 updates","dependabot","2026-10-02"
-    - config, thiserror. Was open last week.
-
-- Cleanup      
-  - "694","README: add note about using `just preflight`.","msgilligan","2026-10-08"
-  - "690","Modify Dockerfile to copy p2poolv2_wallet","RandyMcMillan","2026-10-07"
-    - Docker build broke after the p2poolv2_address → p2poolv2_wallet rename.
-  - "687","Add .rs to .gitattributes","pool2win","2026-10-05"
-    - GitHub was detecting .rs as RenderScript.
-  - "680","lib.rs: \"Sharechain\" instead of \"Share chain\" in comment","msgilligan","2026-10-07"
-    - Started as a CI test after #679 failed (toolchain issue fixed by #681).
-  - "679","Rename crate p2poolv2_wallet from p2poolv2_address","msgilligan","2026-10-03"
 
 *** New PRs Opened
 - "696","deps: bump tokio from 1.53.1 to 1.53.2 in the cargo-minor-patch group across 1 directory","dependabot","open"
@@ -99,27 +99,28 @@
       draft on 2026-10-07.
 
 *** New Issues
-- Share chain consensus
-  - #677 `pool_signature` is consensus-critical but user-tweakable config (johnnyasantoss)
-    - pool_signature (from local config) is pushed into the coinbase scriptSig
-      used to reconstruct the merkle root in `validate_bitcoin_payout`, so
-      nodes with different values reject each other's blocks and get stuck
-      (also wedges candidate index: "Mismatch in top height").
-      `difficulty_multiplier` is the same hazard class.
-    - Jungly: There's three issues reported here. Need to disentangle and address them
-      - pool signature as the title says
-      - sync stuck issue that needs to be verified
-      - difficulty
 
-- Dashboards
-  - #678 Update pool grafana dashboard pool hashrate with 1h rate curve (johnnyasantoss)
-    - Originally: pool-wide hashrate in grafana 30–50% below expected.
-      Partly an offline worker on pool2win's node (and grafana possibly
-      misreporting worker count); retitled to add the 1h average rate curve
-      to the deployment dashboard, targeted for next release.
-  - #688 Show found bitcoin blocks in /dashboard and grafana dashboard (pool2win)
-    - Historical blocks need to be fetched from the bitcoin node to populate
-      the dashboards.
+**** Share chain consensus
+- #677 `pool_signature` is consensus-critical but user-tweakable config (johnnyasantoss)
+  - pool_signature (from local config) is pushed into the coinbase scriptSig
+    used to reconstruct the merkle root in `validate_bitcoin_payout`, so
+    nodes with different values reject each other's blocks and get stuck
+    (also wedges candidate index: "Mismatch in top height").
+    `difficulty_multiplier` is the same hazard class.
+  - Jungly: There's three issues reported here. Need to disentangle and address them
+    - pool signature as the title says
+    - sync stuck issue that needs to be verified
+    - difficulty
+
+**** Dashboards
+- #678 Update pool grafana dashboard pool hashrate with 1h rate curve (johnnyasantoss)
+  - Originally: pool-wide hashrate in grafana 30–50% below expected.
+    Partly an offline worker on pool2win's node (and grafana possibly
+    misreporting worker count); retitled to add the 1h average rate curve
+    to the deployment dashboard, targeted for next release.
+- #688 Show found bitcoin blocks in /dashboard and grafana dashboard (pool2win)
+  - Historical blocks need to be fetched from the bitcoin node to populate
+    the dashboards.
 
 
 *** Discussions
