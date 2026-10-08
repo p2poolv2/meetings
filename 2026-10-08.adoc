@@ -182,7 +182,7 @@ a|*deps: bump uint from 0.10.1 to 0.10.2 in the cargo-minor-patch group*
 * Closed in favour of #693, which also removes the `allow(deprecated)`.
 |===
 
-==== Open PRs awaiting review
+=== Open PRs awaiting review
 
 [cols="1,2,8"]
 |===
