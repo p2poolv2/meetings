@@ -5,15 +5,11 @@
 :END:
 
 ** Agenda
-- [ ] Go through Updates
-- [ ] #628 Ansible role for Grafana + Prometheus, Arch support for nginx
+- [X] Go through Updates
+- [X] #628 Ansible role for Grafana + Prometheus, Arch support for nginx
   (juwon) – still pending local test from last week
-- [ ] Follow-up on 2026-09-13 in person meeting issues (#646, #647, #652,
-  #653, #657 testnet4) and wallet issues (#648–#651, #655, #656)
-- [ ] Older open PRs – triage/close stale ones (#621, #609, #606, #605, #424,
-  #359, #356, #355, #137, #73)
-- [ ] PDM – go through PDM updates below
-- [ ] New website is up https://p2poolv2.org
+- [X] PDM – go through PDM updates below
+- [X] New website is up https://p2poolv2.org
 
 ** Updates
 *** In Progress
@@ -48,6 +44,8 @@
   - Follows current best practice for more version rolling space (Bitcoin
     Core #34779, backported to 30.x/31.x; BIPs #2116; ESP-Miner).
   - pool2win to test locally with a bitaxe; asked if author tested with one.
+- "676", "Refactor: move Address to P2PoolAddress in address.rs", "msgilligan", "open"
+  - pool2win left a review with pushback on the rename
 
 *** New Issues
 - No new issues
