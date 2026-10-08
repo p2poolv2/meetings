@@ -25,64 +25,34 @@
 
 # gh --repo p2poolv2/p2poolv2 pr list --state merged   --search "merged:>=2026-10-01"   --json number,title,author,mergedAt   | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
 *** Merged / Shipped
-
 **** Share chain work
-- "695","Share identity binding using midstate trick from original p2pool","pool2win","2026-10-08"
-  - Fixes a DoS where attackers could build many share headers for one found
-    share and flood peers' header queues; sha256 midstate trick limits one
-    bitcoin PoW to one share header. PoW check itself was already correct.
-  - Changes share header and block formats → requires a chain reset (no
-    migration for testnet4). Scheme documented at
-    https://docs.p2poolv2.org/architecture/share_commitment.html
-- "691","Move share commitment to share header","pool2win","2026-10-07"
-  - Share commitment was in the bitcoin coinbase scriptSig, making the share
-    blockhash malleable; now in the share header using the p2pool midstate
-    trick. Some share header fields still not committed to in the coinbase –
-    tightened further in #695.
-- "689","Search highest work valid block as mining base","pool2win","2026-10-06"
-  - Mining base search was over all !Invalid blocks (attackable with non-PoW
-    headers, long chains needing arbitrary caps); now limited to BlockValid
-    blocks with valid PoW.
-- "683","Handle peer liveness and recovery","pool2win","2026-10-05"
-  - Explicit ping-failure handling (libp2p no longer does it), per-peer
-    connection count tracking to stop flaky peers reconnecting, close idle
-    connections, connection metrics for grafana, handshake fix so branches
-    with different tips can sync.
-- "682","Refactor node actor select switch","pool2win","2026-10-05"
-  - Replaces big dispatch table that caused backpressure from slow jobs, and
-    the loop sending swarm events to itself (potential deadlocks). Cleaner
-    shutdown with named tokio tasks and JoinSets.
+| PR | Author | Title / description |
+|----+--------+---------------------|
+| [[https://github.com/p2poolv2/p2poolv2/pull/695][#695]] | pool2win | *Share identity binding using midstate trick from original p2pool* — Fixes a DoS where attackers could build many share headers for one found share and flood peers' header queues; sha256 midstate trick limits one bitcoin PoW to one share header. PoW check itself was already correct. Changes share header and block formats → requires a chain reset (no migration for testnet4). Scheme documented at https://docs.p2poolv2.org/architecture/share_commitment.html |
+| [[https://github.com/p2poolv2/p2poolv2/pull/691][#691]] | pool2win | *Move share commitment to share header* — Share commitment was in the bitcoin coinbase scriptSig, making the share blockhash malleable; now in the share header using the p2pool midstate trick. Some share header fields still not committed to in the coinbase – tightened further in #695. |
+| [[https://github.com/p2poolv2/p2poolv2/pull/689][#689]] | pool2win | *Search highest work valid block as mining base* — Mining base search was over all !Invalid blocks (attackable with non-PoW headers, long chains needing arbitrary caps); now limited to BlockValid blocks with valid PoW. |
+| [[https://github.com/p2poolv2/p2poolv2/pull/683][#683]] | pool2win | *Handle peer liveness and recovery* — Explicit ping-failure handling (libp2p no longer does it), per-peer connection count tracking to stop flaky peers reconnecting, close idle connections, connection metrics for grafana, handshake fix so branches with different tips can sync. |
+| [[https://github.com/p2poolv2/p2poolv2/pull/682][#682]] | pool2win | *Refactor node actor select switch* — Replaces big dispatch table that caused backpressure from slow jobs, and the loop sending swarm events to itself (potential deadlocks). Cleaner shutdown with named tokio tasks and JoinSets. |
 
 **** Dependencies PRs
-- "693","bump uint to 0.10.2, remove \"allow deprecated\" in pool_difficulty.rs","msgilligan","2026-10-08"
-  - uint 0.10.2 fixes the deprecation warning, so the temporary
-    `allow(deprecated)` added in #681 is removed. Supersedes dependabot #686.
-- "685","Add dependabot cooldown","pool2win","2026-10-05"
-  - Too many tiny patch-update PRs from dependabot.
-- "684","deps: bump the cargo-minor-patch group with 2 updates","dependabot","2026-10-05"
-  - config, tokio-test
-- "681","Pin the Rust toolchain to 1.99.0 for CI and development","pool2win","2026-10-02"
-  - rust-toolchain.toml said `stable`, so CI ran newest stable; 1.99 flagged
-    uint macro deprecations and failed clippy on every PR. Pinned 1.99.0 in
-    toolchain, workflows and Docker builder.
-  - johnnyasantoss suggested pinning sim-nightly too and running zizmor
-    (static analysis for CI hardening); pool2win: worth doing, later.
-- "675","ci: bump taiki-e/install-action from 2.87.17 to 2.87.22 in the actions group across 1 directory","dependabot","2026-10-02"
-  - Was open last week.
-- "674","deps: bump the cargo-minor-patch group with 2 updates","dependabot","2026-10-02"
-  - config, thiserror. Was open last week.
+| PR | Author | Title / description |
+|----+--------+---------------------|
+| [[https://github.com/p2poolv2/p2poolv2/pull/693][#693]] | msgilligan | *bump uint to 0.10.2, remove "allow deprecated" in pool_difficulty.rs* — uint 0.10.2 fixes the deprecation warning, so the temporary `allow(deprecated)` added in #681 is removed. Supersedes dependabot #686. |
+| [[https://github.com/p2poolv2/p2poolv2/pull/685][#685]] | pool2win | *Add dependabot cooldown* — Too many tiny patch-update PRs from dependabot. |
+| [[https://github.com/p2poolv2/p2poolv2/pull/684][#684]] | dependabot | *deps: bump the cargo-minor-patch group with 2 updates* — config, tokio-test |
+| [[https://github.com/p2poolv2/p2poolv2/pull/681][#681]] | pool2win | *Pin the Rust toolchain to 1.99.0 for CI and development* — rust-toolchain.toml said `stable`, so CI ran newest stable; 1.99 flagged uint macro deprecations and failed clippy on every PR. Pinned 1.99.0 in toolchain, workflows and Docker builder. johnnyasantoss suggested pinning sim-nightly too and running zizmor (static analysis for CI hardening); pool2win: worth doing, later. |
+| [[https://github.com/p2poolv2/p2poolv2/pull/675][#675]] | dependabot | *ci: bump taiki-e/install-action from 2.87.17 to 2.87.22 in the actions group across 1 directory* — Was open last week. |
+| [[https://github.com/p2poolv2/p2poolv2/pull/674][#674]] | dependabot | *deps: bump the cargo-minor-patch group with 2 updates* — config, thiserror. Was open last week. |
 
 **** Cleanup
-- "694","README: add note about using `just preflight`.","msgilligan","2026-10-08"
-- "690","Modify Dockerfile to copy p2poolv2_wallet","RandyMcMillan","2026-10-07"
-  - Docker build broke after the p2poolv2_address → p2poolv2_wallet rename.
-- "687","Add .rs to .gitattributes","pool2win","2026-10-05"
-  - GitHub was detecting .rs as RenderScript.
-- "680","lib.rs: \"Sharechain\" instead of \"Share chain\" in comment","msgilligan","2026-10-07"
-  - Started as a CI test after #679 failed (toolchain issue fixed by #681).
-- "679","Rename crate p2poolv2_wallet from p2poolv2_address","msgilligan","2026-10-03"
-- "692","p2poolv2_wallet: update the package name/description to match the recent directory rename.","msgilligan","2026-10-07"
-  - Follow-up to #679, which had only moved the directory.
+| PR | Author | Title / description |
+|----+--------+---------------------|
+| [[https://github.com/p2poolv2/p2poolv2/pull/694][#694]] | msgilligan | *README: add note about using `just preflight`.* |
+| [[https://github.com/p2poolv2/p2poolv2/pull/690][#690]] | RandyMcMillan | *Modify Dockerfile to copy p2poolv2_wallet* — Docker build broke after the p2poolv2_address → p2poolv2_wallet rename. |
+| [[https://github.com/p2poolv2/p2poolv2/pull/687][#687]] | pool2win | *Add .rs to .gitattributes* — GitHub was detecting .rs as RenderScript. |
+| [[https://github.com/p2poolv2/p2poolv2/pull/680][#680]] | msgilligan | *lib.rs: "Sharechain" instead of "Share chain" in comment* — Started as a CI test after #679 failed (toolchain issue fixed by #681). |
+| [[https://github.com/p2poolv2/p2poolv2/pull/679][#679]] | msgilligan | *Rename crate p2poolv2_wallet from p2poolv2_address* |
+| [[https://github.com/p2poolv2/p2poolv2/pull/692][#692]] | msgilligan | *p2poolv2_wallet: update the package name/description to match the recent directory rename.* — Follow-up to #679, which had only moved the directory. |
 
 *** New PRs Opened
 - "696","deps: bump tokio from 1.53.1 to 1.53.2 in the cargo-minor-patch group across 1 directory","dependabot","open"
