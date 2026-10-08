@@ -1,0 +1,79 @@
+= Weekly Call – YYYY-MM-DD (Thu)
+:project: p2poolv2
+:tags: weekly
+:attendees:
+
+== Agenda
+
+* [ ] Go through Updates
+* [ ] PDM – go through PDM updates below
+
+== Updates
+
+=== In Progress
+
+* {empty}
+
+// gh --repo p2poolv2/p2poolv2 pr list --state merged --search "merged:>=YYYY-MM-DD" --json number,title,author,mergedAt | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+=== Merged / Shipped
+
+==== Theme
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/NNN[#NNN]
+|author
+a|*PR title*
+
+* What and why.
+* Review status / next step.
+|===
+
+=== New PRs Opened
+
+* none
+
+=== New Issues
+
+* none
+
+=== Discussions
+
+* No new or updated discussions
+
+=== PDM (p2poolv2/pdm)
+
+* Merged: none
+* New PRs Opened: none
+* New Issues: none
+
+=== Blocked
+
+* {empty}
+
+== Discussion Notes
+
+* {empty}
+
+== Decisions
+
+* {empty}
+
+== Action Items
+
+[cols="2,6,2"]
+|===
+|Owner |Task |Due
+
+|
+|
+|
+|===
+
+== Next Call
+
+* Date: YYYY-MM-DD (Thu)
+* Topics to carry forward:
+** {empty}

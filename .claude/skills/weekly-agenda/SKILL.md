@@ -1,20 +1,22 @@
 ---
 name: weekly-agenda
-description: Prepare this week's p2poolv2 weekly call agenda by pulling merged PRs, new PRs, new issues and discussions from github.com/p2poolv2/p2poolv2 and github.com/p2poolv2/pdm into today's YYYY-MM-DD.org file. Use when the user runs /weekly-agenda or asks to update/prepare the meeting agenda.
+description: Prepare this week's p2poolv2 weekly call agenda by pulling merged PRs, new PRs, new issues and discussions from github.com/p2poolv2/p2poolv2 and github.com/p2poolv2/pdm into today's YYYY-MM-DD.adoc file. Use when the user runs /weekly-agenda or asks to update/prepare the meeting agenda.
 disable-model-invocation: true
 argument-hint: "[YYYY-MM-DD meeting date, defaults to today]"
-allowed-tools: Bash(gh *), Bash(date *), Bash(ls *), Bash(cat *), Bash(cp *), Read, Write, Edit
+allowed-tools: Bash(gh *), Bash(date *), Bash(ls *), Bash(cat *), Bash(cp *), Bash(asciidoctor *), Read, Write, Edit
 ---
 
 # Weekly agenda for p2poolv2
 
 Meeting date: `$ARGUMENTS` if given, otherwise today (`date +%F`). The file is
-`<date>.org` in the repo root. See `AGENTS.md` for the file conventions.
+`<date>.adoc` in the repo root (AsciiDoc). See `AGENTS.md` for the file
+conventions.
 
 ## 1. Find the reporting window
 
-- Previous notes: the latest `YYYY-MM-DD.org` before the meeting date (ignore
-  `*.org~` backups). Read it and use its date as the window start `S`.
+- Previous notes: the latest `YYYY-MM-DD.adoc` or `YYYY-MM-DD.org` (notes
+  before 2026-10-08 are org) before the meeting date (ignore `*~` backups).
+  Read it and use its date as the window start `S`.
 - Also read any in-person / non-weekly notes in the window; issues created from
   them should be grouped under "From the <date> meeting" and recapped in the agenda.
 - Read the previous file's "Next Call → Topics to carry forward" and any open
@@ -69,43 +71,61 @@ do note the outcome of Copilot reviews (e.g. "all items addressed").
 
 ## 3. Write the agenda
 
-- If `<date>.org` doesn't exist, copy `template.org` to it.
-- Set the heading timestamp to `<date Day>` (e.g. `<2026-09-24 Thu>`), and
-  `Next Call` date to one week later. Leave `:ATTENDEES:` empty.
-- Update the `# gh ...` comment above "Merged / Shipped" to use `merged:>=S`.
-- Fill sections under `** Updates` using org tables, one table per group.
-  Columns are `| PR | Author | Title / description |` (`| Issue | ... |`
-  for issues), with a `|----+--------+---------------------|` separator:
-  - First column links the number: `[[https://github.com/<repo>/pull/<n>][#<n>]]`
-    (`/issues/<n>` for issues), using the matching repo (pdm links for PDM).
-  - Second column is the author handle; label dependabot as `dependabot`.
-  - Third column is the bold title, then ` — ` and the summary of the body
-    and comments/review: what and why, open questions, who said what,
-    current status / next step. Org cells are single lines, so join points
-    with `; ` or `(1) … (2) …`. Never put a literal `|` in a cell.
-  - No dates in rows. For non-merged PRs start the summary with the state
-    (`Open.`, `Draft.`, `Closed …`) and `carried over` where it applies.
-  - Group rows under `****` theme headings (e.g. Share chain work,
+- If `<date>.adoc` doesn't exist, copy `template.adoc` to it.
+- Set the title to `= Weekly Call – <date> (<Day>)` (e.g. `2026-10-08 (Thu)`)
+  and the `Next Call` date to one week later. Leave `:attendees:` empty.
+- Update the `// gh ...` comment above "Merged / Shipped" to use `merged:>=S`.
+- Fill sections under `== Updates` with AsciiDoc tables, one per group,
+  in this shape (`|Issue` header for issues):
+
+  ```adoc
+  ==== Share chain work
+
+  [cols="1,2,8"]
+  |===
+  |PR |Author |Title / description
+
+  |https://github.com/p2poolv2/p2poolv2/pull/695[#695]
+  |pool2win
+  a|*Share identity binding using midstate trick from original p2pool*
+
+  * What it does and why.
+  * Review / discussion status, who said what, next step.
+  |===
+  ```
+
+  - First column links the number to `/pull/<n>` or `/issues/<n>` in the
+    matching repo (pdm links for PDM). Second column is the author handle;
+    label dependabot as `dependabot`.
+  - Third column is an `a|` cell: bold title, blank line, then 1–4 short
+    bullets (nested `**` allowed) summarising the body and comments/review.
+    Wrap source lines at ~78 cols. Escape a literal `|` in text as `\|`.
+  - No dates in rows. For non-merged PRs the first bullet is the state
+    (`Open.`, `Draft, carried over.`, `Closed in favour of …`).
+  - Group rows under `====` theme headings (e.g. Share chain work,
     Dependencies PRs, Cleanup; for issues by theme, from in-person meeting,
     or contributor), each heading with its own table.
-  - Sections: `*** Merged / Shipped`; `*** New PRs Opened` (with a
-    `**** Open PRs awaiting review` table for carried-over open PRs);
-    `*** New Issues` (note issues closed in the window);
-    `*** Discussions` (link to `/discussions/<n>`).
+  - Sections: `=== Merged / Shipped`; `=== New PRs Opened` (with a
+    `==== Open PRs awaiting review` table for carried-over open PRs);
+    `=== New Issues` (note issues closed in the window);
+    `=== Discussions` (link to `/discussions/<n>`).
   - For dependabot PRs the summary is just the bumped packages.
-  - An empty section is a plain `- none` / `- No new ...` line, not a table.
-- Add a `*** PDM (p2poolv2/pdm)` section before `*** Blocked`: one-line
-  `- Merged: none` style entries for empty parts, and `****` tables for
+  - An empty section is a plain `* none` / `* No new ...` line, not a table;
+    a placeholder bullet is `* {empty}`.
+- Add a `=== PDM (p2poolv2/pdm)` section before `=== Blocked`: one-line
+  `* Merged: none` style entries for empty parts, and `====` tables for
   Merged, New PRs Opened, Open PRs awaiting review and New Issues that have
   entries.
-- Fill `** Agenda` with `- [ ]` items, starting with `- [ ] Go through
+- Check it renders without warnings:
+  `asciidoctor --failure-level WARN -o /dev/null <date>.adoc`.
+- Fill `== Agenda` with `* [ ]` items, starting with `* [ ] Go through
   Updates`. **Do not repeat anything listed under Updates** (merged PRs, new
   PRs, new/closed issues, discussions, PDM items) — those are covered by going
   through Updates and repeating them is confusing. The agenda is only for
   things not in Updates: carried-forward topics, open questions from earlier
   meetings, older open PRs still waiting on review/action, follow-ups on
   issue groups from earlier meetings, stale-PR triage. End with
-  `- [ ] PDM – go through PDM updates below`.
+  `* [ ] PDM – go through PDM updates below`.
 - Leave Discussion Notes, Decisions, Action Items, Blocked for the meeting.
 - Preserve anything the user already wrote in the file; merge, don't clobber.
 
