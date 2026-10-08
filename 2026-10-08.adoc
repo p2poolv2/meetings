@@ -89,27 +89,11 @@ a|*bump uint to 0.10.2, remove "allow deprecated" in pool_difficulty.rs*
 * uint 0.10.2 fixes the deprecation warning, so the temporary
   `allow(deprecated)` added in #681 is removed. Supersedes dependabot #686.
 
-|https://github.com/p2poolv2/p2poolv2/pull/685[#685]
-|pool2win
-a|*Add dependabot cooldown*
-
-* Too many tiny patch-update PRs from dependabot.
-
 |https://github.com/p2poolv2/p2poolv2/pull/684[#684]
 |dependabot
 a|*deps: bump the cargo-minor-patch group with 2 updates*
 
 * config, tokio-test
-
-|https://github.com/p2poolv2/p2poolv2/pull/681[#681]
-|pool2win
-a|*Pin the Rust toolchain to 1.99.0 for CI and development*
-
-* rust-toolchain.toml said `stable`, so CI ran newest stable; 1.99 flagged
-  uint macro deprecations and failed clippy on every PR. Pinned 1.99.0 in
-  toolchain, workflows and Docker builder.
-* johnnyasantoss suggested pinning sim-nightly too and running zizmor
-  (static analysis for CI hardening); pool2win: worth doing, later.
 
 |https://github.com/p2poolv2/p2poolv2/pull/675[#675]
 |dependabot
@@ -145,6 +129,22 @@ a|*Modify Dockerfile to copy p2poolv2_wallet*
 a|*Add .rs to .gitattributes*
 
 * GitHub was detecting .rs as RenderScript.
+
+|https://github.com/p2poolv2/p2poolv2/pull/685[#685]
+|pool2win
+a|*Add dependabot cooldown*
+
+* Too many tiny patch-update PRs from dependabot.
+
+|https://github.com/p2poolv2/p2poolv2/pull/681[#681]
+|pool2win
+a|*Pin the Rust toolchain to 1.99.0 for CI and development*
+
+* rust-toolchain.toml said `stable`, so CI ran newest stable; 1.99 flagged
+  uint macro deprecations and failed clippy on every PR. Pinned 1.99.0 in
+  toolchain, workflows and Docker builder.
+* johnnyasantoss suggested pinning sim-nightly too and running zizmor
+  (static analysis for CI hardening); pool2win: worth doing, later.
 
 |https://github.com/p2poolv2/p2poolv2/pull/680[#680]
 |msgilligan
