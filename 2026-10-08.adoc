@@ -19,11 +19,6 @@
 === In Progress
 
 * Docs updated with new commitment scheme
-* Payments conf. update
-** ARK discussions
-** LN payouts
-*** going back full circle to Belcher's idea
-*** Lock in market maker liquidity before starting mining
 
 // gh --repo p2poolv2/p2poolv2 pr list --state merged --search "merged:>=2026-10-01" --json number,title,author,mergedAt | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
 === Merged / Shipped
@@ -255,7 +250,14 @@ a|*Show found bitcoin blocks in /dashboard and grafana dashboard*
 
 === Discussions
 
-* No new or updated discussions
+* nix discussions
+** Sean is starting some nix work to run p2poolv2
+* Payments conf. update
+** ARK discussions
+** LN payouts
+*** going back full circle to Belcher's idea
+*** Lock in market maker liquidity before starting mining
+
 
 === PDM (p2poolv2/pdm)
 
