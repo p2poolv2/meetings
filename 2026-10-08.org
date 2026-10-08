@@ -55,43 +55,28 @@
 | [[https://github.com/p2poolv2/p2poolv2/pull/692][#692]] | msgilligan | *p2poolv2_wallet: update the package name/description to match the recent directory rename.* — Follow-up to #679, which had only moved the directory. |
 
 *** New PRs Opened
-- "696","deps: bump tokio from 1.53.1 to 1.53.2 in the cargo-minor-patch group across 1 directory","dependabot","open"
-  - tokio
-- "686","deps: bump uint from 0.10.1 to 0.10.2 in the cargo-minor-patch group","dependabot","closed"
-  - Closed in favour of #693, which also removes the `allow(deprecated)`.
-- Open PRs awaiting review
-  - "676","Refactor: move Address to P2PoolAddress in address.rs","msgilligan","draft" (carried over)
-    - pool2win's review (2026-10-01): keep `Address` and rely on module paths
-      / `as` aliasing per idiomatic Rust; rename would force verbose
-      `P2PoolAddressError` etc. Agreed to drop `v2` from module paths and
-      re-export `Address` at the crate root.
-    - msgilligan: important to agree on these conventions. Converted to
-      draft on 2026-10-07.
+| PR | Author | Title / description |
+|----+--------+---------------------|
+| [[https://github.com/p2poolv2/p2poolv2/pull/696][#696]] | dependabot | *deps: bump tokio from 1.53.1 to 1.53.2 in the cargo-minor-patch group across 1 directory* — Open. tokio |
+| [[https://github.com/p2poolv2/p2poolv2/pull/686][#686]] | dependabot | *deps: bump uint from 0.10.1 to 0.10.2 in the cargo-minor-patch group* — Closed in favour of #693, which also removes the `allow(deprecated)`. |
+
+**** Open PRs awaiting review
+| PR | Author | Title / description |
+|----+--------+---------------------|
+| [[https://github.com/p2poolv2/p2poolv2/pull/676][#676]] | msgilligan | *Refactor: move Address to P2PoolAddress in address.rs* — Draft, carried over. pool2win's review (2026-10-01): keep `Address` and rely on module paths / `as` aliasing per idiomatic Rust; rename would force verbose `P2PoolAddressError` etc. Agreed to drop `v2` from module paths and re-export `Address` at the crate root. msgilligan: important to agree on these conventions. Converted to draft on 2026-10-07. |
 
 *** New Issues
 
 **** Share chain consensus
-- #677 `pool_signature` is consensus-critical but user-tweakable config (johnnyasantoss)
-  - pool_signature (from local config) is pushed into the coinbase scriptSig
-    used to reconstruct the merkle root in `validate_bitcoin_payout`, so
-    nodes with different values reject each other's blocks and get stuck
-    (also wedges candidate index: "Mismatch in top height").
-    `difficulty_multiplier` is the same hazard class.
-  - Jungly: There's three issues reported here. Need to disentangle and address them
-    - pool signature as the title says
-    - sync stuck issue that needs to be verified
-    - difficulty
+| Issue | Author | Title / description |
+|-------+--------+---------------------|
+| [[https://github.com/p2poolv2/p2poolv2/issues/677][#677]] | johnnyasantoss | *`pool_signature` is consensus-critical but user-tweakable config* — pool_signature (from local config) is pushed into the coinbase scriptSig used to reconstruct the merkle root in `validate_bitcoin_payout`, so nodes with different values reject each other's blocks and get stuck (also wedges candidate index: "Mismatch in top height"). `difficulty_multiplier` is the same hazard class. Jungly: There's three issues reported here. Need to disentangle and address them: (1) pool signature as the title says; (2) sync stuck issue that needs to be verified; (3) difficulty. |
 
 **** Dashboards
-- #678 Update pool grafana dashboard pool hashrate with 1h rate curve (johnnyasantoss)
-  - Originally: pool-wide hashrate in grafana 30–50% below expected.
-    Partly an offline worker on pool2win's node (and grafana possibly
-    misreporting worker count); retitled to add the 1h average rate curve
-    to the deployment dashboard, targeted for next release.
-- #688 Show found bitcoin blocks in /dashboard and grafana dashboard (pool2win)
-  - Historical blocks need to be fetched from the bitcoin node to populate
-    the dashboards.
-
+| Issue | Author | Title / description |
+|-------+--------+---------------------|
+| [[https://github.com/p2poolv2/p2poolv2/issues/678][#678]] | johnnyasantoss | *Update pool grafana dashboard pool hashrate with 1h rate curve* — Originally: pool-wide hashrate in grafana 30–50% below expected. Partly an offline worker on pool2win's node (and grafana possibly misreporting worker count); retitled to add the 1h average rate curve to the deployment dashboard, targeted for next release. |
+| [[https://github.com/p2poolv2/p2poolv2/issues/688][#688]] | pool2win | *Show found bitcoin blocks in /dashboard and grafana dashboard* — Historical blocks need to be fetched from the bitcoin node to populate the dashboards. |
 
 *** Discussions
 - No new or updated discussions
@@ -99,15 +84,18 @@
 *** PDM (p2poolv2/pdm)
 - Merged: none
 - New PRs Opened: none
-- Open PRs awaiting review
-  - "34","feat: add P2Poolv2 systemd service controls","R27-pixel","open" (carried over)
-    - No new activity; Copilot items addressed, still waiting on maintainer
-      review.
-  - "35","(WIP)- P2poolv2 memory/storage usage view","R27-pixel","draft" (carried over)
-    - No new activity; waiting on #34.
 - New Issues: none
-  - #36 installation/systemd setup (carried over) – R27-pixel's question on
-    scope still unanswered.
+
+**** Open PRs awaiting review
+| PR | Author | Title / description |
+|----+--------+---------------------|
+| [[https://github.com/p2poolv2/pdm/pull/34][#34]] | R27-pixel | *feat: add P2Poolv2 systemd service controls* — Open, carried over. No new activity; Copilot items addressed, still waiting on maintainer review. |
+| [[https://github.com/p2poolv2/pdm/pull/35][#35]] | R27-pixel | *(WIP)- P2poolv2 memory/storage usage view* — Draft, carried over. No new activity; waiting on #34. |
+
+**** Open issues carried over
+| Issue | Author | Title / description |
+|-------+--------+---------------------|
+| [[https://github.com/p2poolv2/pdm/issues/36][#36]] | R27-pixel | *P2Poolv2 installation and systemd setup* — R27-pixel's question on scope still unanswered. |
 
 *** Blocked
 -

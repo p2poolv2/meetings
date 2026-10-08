@@ -23,7 +23,10 @@ Notes are written in Emacs org-mode.
 Conventions:
 - Reference GitHub issues/PRs/discussions as `#123` (numbers under the PDM
   heading/agenda item refer to p2poolv2/pdm).
-- Merged PRs are listed as CSV lines `- "num","title","author","date"`.
+- PRs, issues and discussions under Updates are org tables
+  `| PR | Author | Title / description |`, one per `****` theme heading; the
+  number links to GitHub, the title is bold followed by a summary, and rows
+  carry no dates.
 - Refer to people by their handle as used in previous notes.
 - Don't invent attendees, decisions or discussion content — those are filled
   in by the user during or after the call.

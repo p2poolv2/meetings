@@ -73,19 +73,31 @@ do note the outcome of Copilot reviews (e.g. "all items addressed").
 - Set the heading timestamp to `<date Day>` (e.g. `<2026-09-24 Thu>`), and
   `Next Call` date to one week later. Leave `:ATTENDEES:` empty.
 - Update the `# gh ...` comment above "Merged / Shipped" to use `merged:>=S`.
-- Fill sections under `** Updates`:
-  - `*** Merged / Shipped` — CSV lines `- "num","title","author","YYYY-MM-DD"` (existing style).
-  - `*** New PRs Opened` — same CSV style with state instead of date; label
-    dependabot PRs as `dependabot`.
-  - `*** New Issues` — `- #num title`, grouped by theme or author (e.g. wallet,
-    from in-person meeting, contributor name). Note issues closed in the window.
-  - `*** Discussions` — `- #num title (author, date)`.
-  - Under every PR, issue and discussion entry (including closed issues and
-    the PDM section) add indented `  - ` sub-bullets summarising the body and
-    the comments/review: what and why, open questions, who said what, current
-    status / next step. Keep it to 1–4 short bullets, wrapped at ~78 cols.
-- Add a `*** PDM (p2poolv2/pdm)` section before `*** Blocked` with: Merged,
-  New PRs Opened, Open PRs awaiting review, New Issues (CSV style, "none" if empty).
+- Fill sections under `** Updates` using org tables, one table per group.
+  Columns are `| PR | Author | Title / description |` (`| Issue | ... |`
+  for issues), with a `|----+--------+---------------------|` separator:
+  - First column links the number: `[[https://github.com/<repo>/pull/<n>][#<n>]]`
+    (`/issues/<n>` for issues), using the matching repo (pdm links for PDM).
+  - Second column is the author handle; label dependabot as `dependabot`.
+  - Third column is the bold title, then ` — ` and the summary of the body
+    and comments/review: what and why, open questions, who said what,
+    current status / next step. Org cells are single lines, so join points
+    with `; ` or `(1) … (2) …`. Never put a literal `|` in a cell.
+  - No dates in rows. For non-merged PRs start the summary with the state
+    (`Open.`, `Draft.`, `Closed …`) and `carried over` where it applies.
+  - Group rows under `****` theme headings (e.g. Share chain work,
+    Dependencies PRs, Cleanup; for issues by theme, from in-person meeting,
+    or contributor), each heading with its own table.
+  - Sections: `*** Merged / Shipped`; `*** New PRs Opened` (with a
+    `**** Open PRs awaiting review` table for carried-over open PRs);
+    `*** New Issues` (note issues closed in the window);
+    `*** Discussions` (link to `/discussions/<n>`).
+  - For dependabot PRs the summary is just the bumped packages.
+  - An empty section is a plain `- none` / `- No new ...` line, not a table.
+- Add a `*** PDM (p2poolv2/pdm)` section before `*** Blocked`: one-line
+  `- Merged: none` style entries for empty parts, and `****` tables for
+  Merged, New PRs Opened, Open PRs awaiting review and New Issues that have
+  entries.
 - Fill `** Agenda` with `- [ ]` items, starting with `- [ ] Go through
   Updates`. **Do not repeat anything listed under Updates** (merged PRs, new
   PRs, new/closed issues, discussions, PDM items) — those are covered by going
