@@ -1,0 +1,293 @@
+= Weekly Call – 2026-10-15 (Thu)
+:project: p2poolv2
+:tags: weekly
+:attendees:
+
+== Updates
+
+=== In Progress
+
+* {empty}
+
+// gh --repo p2poolv2/p2poolv2 pr list --state merged --search "merged:>=2026-10-08" --json number,title,author,mergedAt | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+=== Merged / Shipped
+
+==== Share chain work
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/709[#709]
+|pool2win
+a|*Wait for share maturity before paying them*
+
+* Maturity was enforced for spends but not for payout distribution; shares
+  now only enter PPLNS payouts after 6048 confirmations (70% of the daily
+  share block target, close to bitcoin's 100-block coinbase maturity), so
+  miners aren't paid for shares that could still be reorged out.
+* Closes #552. Documented at
+  https://docs.p2poolv2.org/architecture/pplns_accounting.html
+
+|https://github.com/p2poolv2/p2poolv2/pull/707[#707]
+|pool2win
+a|*Mine on bitcoin active chain*
+
+* Design doc `docs/architecture/mine-on-bitcoin-chain.md` plus TLA+ spec
+  (with attacker config) for #652: a share's coinbase pays a window share
+  only if its bitcoin prev is on (or one block off) the bitcoin chain the
+  paying share builds on; share messages carry the needed bitcoin headers;
+  shares are accepted only once their bitcoin prev header is known.
+* Work on fabricated bitcoin blocks never paid, hostile forks paid for at
+  most their first two blocks, orphan-race losers still paid.
+* Docs/spec only; implementation is #653. Might not start on this for
+  a while.
+
+|https://github.com/p2poolv2/p2poolv2/pull/703[#703]
+|pool2win
+a|*Remove difficulty multiplier for share chain PPLNS window*
+
+* PPLNS window difficulty multiplier is now a constant in
+  code. Leaving it to node operators will break consensus.
+
+|https://github.com/p2poolv2/p2poolv2/pull/699[#699]
+|pool2win
+a|*Take pool signature out of consensus*
+
+* `pool_signature` no longer part of the coinbase reconstruction used in
+  validation, so nodes with different signatures agree on validity; sim
+  runs now use different pool sigs.
+|===
+
+==== Dashboards
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/704[#704]
+|pool2win
+a|*Show 1h avg on public pool dashboard*
+
+* Closes #678.
+
+|https://github.com/p2poolv2/p2poolv2/pull/702[#702]
+|pool2win
+a|*Show connection health and blocks found on grafana*
+
+* Adds a P2P health row to the private node dashboard and a graph under
+  blocks found.
+
+|https://github.com/p2poolv2/p2poolv2/pull/700[#700]
+|pool2win
+a|*Show found blocks in dashboards*
+
+* Closes #688.
+|===
+
+==== Dependencies PRs
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/696[#696]
+|dependabot
+a|*deps: bump tokio from 1.53.1 to 1.53.2 in the cargo-minor-patch group across 1 directory*
+
+* tokio. Was open last week.
+|===
+
+=== New PRs Opened
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/701[#701]
+|adevries17
+a|*Nix Flake*
+
+* Draft.
+* Nix flake to build the project and binaries, plus a development shell.
+  No review yet.
+
+|https://github.com/p2poolv2/p2poolv2/pull/706[#706]
+|dependabot
+a|*ci: bump taiki-e/install-action from 2.87.22 to 2.87.25 in the actions group*
+
+* Open. taiki-e/install-action
+
+|https://github.com/p2poolv2/p2poolv2/pull/705[#705]
+|dependabot
+a|*deps: bump tokio-util from 0.7.19 to 0.7.20 in the cargo-minor-patch group*
+
+* Open. tokio-util
+|===
+
+==== Open PRs awaiting review
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/676[#676]
+|msgilligan
+a|*Refactor: move Address to P2PoolAddress in address.rs*
+
+* Draft, carried over.
+* No new activity since conversion to draft on 2026-10-07.
+|===
+
+=== New Issues
+
+==== Payouts
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/issues/708[#708]
+|pool2win
+a|*Limit coinbase size to 25 outputs*
+
+* Open. Needs a decision on the long tail of miners that don't fit; one
+  suggestion is to sum their payout and send it to one miner chosen at
+  random, weighted by accumulated weight.
+* Belongs to the new payout design with LN – sharechain swaps set up in
+  advance via new sharechain consensus rules (writeup pending); then only
+  a few new miners would be affected.
+|===
+
+==== Dashboards
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/issues/697[#697]
+|pool2win
+a|*Show peer connectivity stats on grafana - /metrics publishes these now*
+
+* Closed (done in #702).
+
+|https://github.com/p2poolv2/p2poolv2/issues/698[#698]
+|pool2win
+a|*Show share discovery rate in grafana - needs /metrics work here*
+
+* Closed; pool2win: might need to instead put in /dashboard instead of grafana.
+|===
+
+==== Closed in this window
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/issues/677[#677]
+|johnnyasantoss
+a|*`pool_signature` is consensus-critical but user-tweakable config*
+
+* Open last week, now closed: pool signature fixed by #699, difficulty
+  multiplier by #703.
+* pool2win is ignoring the genesis-only store getting stuck for now ("not
+  an easy to orchestrate attack").
+
+|https://github.com/p2poolv2/p2poolv2/issues/652[#652]
+|pool2win
+a|*Document share block validation to check bitcoin previous blockhash*
+
+* From the 2026-09-13 meeting. Closed – documented in #707 /
+  https://docs.p2poolv2.org/architecture/bitcoin_chain_validation.html
+
+|https://github.com/p2poolv2/p2poolv2/issues/552[#552]
+|pool2win
+a|*Fix PPLNS to start from after maturity window*
+
+* Closed by #709; pool2win: needed in light of #652 and #653.
+
+|https://github.com/p2poolv2/p2poolv2/issues/678[#678]
+|johnnyasantoss
+a|*Update pool grafana dashboard pool hashrate with 1h rate curve*
+
+* Open last week, closed by #704.
+
+|https://github.com/p2poolv2/p2poolv2/issues/688[#688]
+|pool2win
+a|*Show found bitcoin blocks in /dashboard and grafana dashboard*
+
+* Open last week, closed by #700.
+|===
+
+=== Discussions
+
+* No new or updated discussions
+
+=== PDM (p2poolv2/pdm)
+
+* Merged: none
+* New PRs Opened: none
+* New Issues: none
+
+==== Open PRs awaiting review
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/pdm/pull/34[#34]
+|R27-pixel
+a|*feat: add P2Poolv2 systemd service controls*
+
+* Open, carried over.
+* No new activity since 2026-09-27; still waiting on maintainer review.
+
+|https://github.com/p2poolv2/pdm/pull/35[#35]
+|R27-pixel
+a|*(WIP)- P2poolv2 memory/storage usage view*
+
+* Draft, carried over.
+* No new activity; waiting on #34.
+|===
+
+==== Open issues carried over
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/pdm/issues/36[#36]
+|R27-pixel
+a|*P2Poolv2 installation and systemd setup*
+
+* R27-pixel's question on scope still unanswered.
+|===
+
+=== Blocked
+
+* {empty}
+
+== Discussion Notes
+
+* {empty}
+
+== Decisions
+
+* {empty}
+
+== Action Items
+
+[cols="2,6,2"]
+|===
+|Owner |Task |Due
+
+|
+|
+|
+|===
+
+== Next Call
+
+* Date: 2026-10-22 (Thu)
+* Topics to carry forward:
+** {empty}
