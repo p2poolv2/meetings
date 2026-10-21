@@ -17,7 +17,7 @@
 - [X] R27 questions
   - Questions on sv2, coinbase, etc
 - [X] Johnny updates
-  - Gave a talk at ventium
+  - Gave a [[https://app.evento.so/e/evt_purdGd7CNMrFZSpk][talk]] at [[https://vinteum.org][Vinteum]]
     - People confused about PPLNS and coinbase
   - Docker improvements PR merged
   - Mentioned woxlt's work on IPC for block validations
