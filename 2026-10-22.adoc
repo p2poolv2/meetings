@@ -1,0 +1,359 @@
+= Weekly Call – 2026-10-22 (Thu)
+:project: p2poolv2
+:tags: weekly
+:attendees:
+
+== TL;DR
+
+* New release 0.16.0 with patches 0.16.1 and 0.16.2
+* 0.16.0 required a chain reset as it included a lot of db schema changes and we were still private, so we did it.
+* 0.16.1 Quick fix for missing genesis timestamp change when making the release
+* 0.16.2 added dns seeds to make it easier for users to connect to network and a hydrapool pplns bug fix.
+
+== Updates
+
+=== In Progress
+
+* {empty}
+
+// gh --repo p2poolv2/p2poolv2 pr list --state merged --search "merged:>=2026-10-15" --json number,title,author,mergedAt | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+=== Merged / Shipped
+
+==== Releases
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/713[#713]
+|pool2win
+a|*Prepare release 0.16.0*
+
+* v0.16.0 released 2026-10-19. Consensus and store format change: needs a
+  chain reset and cleared share chain stores; genesis hash is in the libp2p
+  protocol string, so it won't connect to older nodes.
+* Bundles the share identity binding (#695), pool signature out of
+  consensus (#699), no PPLNS difficulty multiplier (#703), share maturity
+  (#709), pruning (#711), found blocks/P2P health dashboards, BIP323
+  version rolling mask, 1 MB P2P message limit, toolchain pinned to 1.99.0,
+  `p2poolv2_address` renamed to `p2poolv2_wallet`.
+
+|https://github.com/p2poolv2/p2poolv2/pull/714[#714]
+|pool2win
+a|*Bump testnet4 genesis timestamp and bump release version*
+
+* v0.16.1 released 2026-10-20. Testnet4 genesis timestamp moved to
+  2026-10-20 05:00 UTC: ASERT counts from genesis time, so the six-week gap
+  held the share target at the easiest value.
+* Another testnet4 chain reset; v0.16.1 testnet4 nodes don't connect to
+  v0.16.0 ones.
+
+|https://github.com/p2poolv2/p2poolv2/pull/720[#720]
+|pool2win
+a|*Make release 0.16.2*
+
+* v0.16.2 released 2026-10-21: DNS seeds (#719), Hydrapool PPLNS fix
+  (#715), rustls update (#716). No chain reset.
+|===
+
+==== Share chain / node work
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/711[#711]
+|pool2win
+a|*Prune block data below prune depth*
+
+* Background task deletes block bodies more than `PRUNE_DEPTH +
+  PRUNE_INTERVAL` below the confirmed tip; headers and merkle branches are
+  kept so pruned nodes still serve header sync from genesis. Prune config
+  moved into code constants.
+* Candidate chain refuses reorgs whose fork point is below the prune target
+  (or within `MAX_UNCLES_DEPTH` of it).
+* New sim runs (normal pruning, a node joining after others pruned, forks
+  in nightly) and design docs in `docs/architecture/pruning.md`. Closes
+  #592.
+
+|https://github.com/p2poolv2/p2poolv2/pull/712[#712]
+|pool2win
+a|*Move genesis data to dat files*
+
+* Genesis shares as raw `.dat` files instead of hex strings in `.rs` –
+  hex troubled editors and took twice the space. Also fixes testnet4
+  genesis hash/height.
+
+|https://github.com/p2poolv2/p2poolv2/pull/719[#719]
+|pool2win
+a|*Add dns seed for easier node setup*
+
+* Built-in per-network DNS seeds (testnet4: `seed.testnet4.p2poolv2.org`),
+  used only as a fallback: at startup with no `dial_peers`, or 10s after
+  startup when none of the `dial_peers` connected. At most 16 addresses
+  per seed; `network.dns_seed` (default `true`) turns it off.
+* `dial_peers` now optional; a node without `listen_address` still dials
+  out. For #717.
+
+|https://github.com/p2poolv2/p2poolv2/pull/715[#715]
+|pool2win
+a|*Fix hydrapool pplns session difficulty*
+
+* In Hydrapool mode a PPLNS share was stored and credited at the full
+  session difficulty even when its hash didn't meet it (since share chain
+  emissions were added). Now stored only when it meets session difficulty.
+* Hydrapool shares go to a new dedicated PPLNS share worker and are never
+  emitted to the share chain; emission worker refactored.
+|===
+
+==== Dependencies PRs
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/716[#716]
+|pool2win
+a|*Update rustls*
+
+* `rustls-webpki` to 0.103.16, security update for the eMudhra incident.
+|===
+
+=== New PRs Opened
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/718[#718]
+|stevenroose
+a|*Add flake-based nix devShell*
+
+* Open. Bare minimum devShell to build on NixOS; alternative to #701.
+* msgilligan requested changes: add `just` (adevries17 also wants
+  `cargo-llvm-cov`), comment on `bin.fromRustupToolchainFile`, question on
+  `nixos-unstable`; Nix shell in CI later. `just preflight` works on
+  aarch64-darwin, issue on aarch64-linux being investigated.
+* Plan per msgilligan: merge this first, then rebase #701 on top.
+
+|https://github.com/p2poolv2/p2poolv2/pull/710[#710]
+|dependabot
+a|*deps: bump the cargo-minor-patch group across 1 directory with 3 updates*
+
+* Open. tokio 1.53.3, serde_json 1.0.154, tokio-util 0.7.20 (supersedes
+  #705, closed by dependabot).
+|===
+
+==== Open PRs awaiting review
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/701[#701]
+|adevries17
+a|*Nix Flake*
+
+* Open, carried over; was draft last week, now ready and rebased to one
+  commit. All derivations build (`workspace`, `p2poolv2_node`,
+  `p2poolv2_sim`).
+* msgilligan now prefers merging devShell-only #718 first and rebasing this
+  on top for the packaging part; adevries17 is fine with that.
+
+|https://github.com/p2poolv2/p2poolv2/pull/628[#628]
+|Juwon-Ogunseye
+a|*Adds a native Ansible role for deploying Grafana + Prometheus, and adds Arch Linux support to the nginx role.*
+
+* Open, carried over (from 2026-10-08 agenda).
+* Juwon-Ogunseye asked pool2win for review. Not yet tested against a real
+  server.
+
+|https://github.com/p2poolv2/p2poolv2/pull/706[#706]
+|dependabot
+a|*ci: bump taiki-e/install-action from 2.87.22 to 2.87.28 in the actions group across 1 directory*
+
+* Open, carried over. taiki-e/install-action, now to 2.87.28.
+
+|https://github.com/p2poolv2/p2poolv2/pull/676[#676]
+|msgilligan
+a|*Refactor: move Address to P2PoolAddress in address.rs*
+
+* Draft, carried over. No new activity since 2026-10-07.
+|===
+
+=== New Issues
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/issues/717[#717]
+|pool2win
+a|*Add DNS seeds for easier setup by users*
+
+* Open; implemented by #719.
+|===
+
+==== Updated issues
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/issues/661[#661]
+|Juwon-Ogunseye
+a|*Fuzz / property-based testing*
+
+* Juwon-Ogunseye's stratum research: no `maximum_difficulty` cap by
+  default, so a miner can set `d=u64::MAX` in its password;
+  `record_share_submission` then overflows `unaccounted_shares` (panic in
+  debug, silent wrap in release). Contained to that miner's session –
+  share is sent to the chain first, payouts unaffected.
+* Proposed property: no overflow for any start difficulty and share run.
+  P2P and API/CLI research still to come. Agreed to track here, project
+  layer later.
+
+|https://github.com/p2poolv2/p2poolv2/issues/650[#650]
+|pool2win
+a|*Show balance and tx history*
+
+* Rustix69 offered to pick it up; reply from pool2win saying the parent issue needs to be done first.
+|===
+
+==== Closed in this window
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/issues/592[#592]
+|pool2win
+a|*Delete data below pruned depth*
+
+* Done in #711, release 0.16.0.
+
+|https://github.com/p2poolv2/p2poolv2/issues/655[#655]
+|pool2win
+a|*Add bitcoin json compatible API support for wallet implementation*
+
+* Closed; doing Electrum (#656) first, can reopen if needed.
+
+|https://github.com/p2poolv2/p2poolv2/issues/584[#584]
+|pool2win
+a|*Restart header sync if initial header first sync is stuck*
+
+* Closed as not required; for now the user restarts the node.
+
+|https://github.com/p2poolv2/p2poolv2/issues/211[#211]
+|pool2win
+a|*Change target share rate from 3s to 10s*
+
+* Closed; keeping it as is – finer share interval gives more accurate
+  hashrate estimation.
+
+|https://github.com/p2poolv2/p2poolv2/issues/201[#201]
+|pool2win
+a|*Tune rocks db - wal and flushing CFs*
+
+* Closed; addressed earlier ("during the summer of LLMs").
+
+|https://github.com/p2poolv2/p2poolv2/issues/178[#178]
+|pool2win
+a|*Use cargo-audit, cargo-vet and related tools*
+
+* Closed; done in earlier PRs.
+
+|https://github.com/p2poolv2/p2poolv2/issues/29[#29]
+|pool2win
+a|*Notes on PPLNS / SPLNS / Tides*
+
+* Closed without further comment.
+|===
+
+=== Discussions
+
+* No new or updated discussions
+
+=== PDM (p2poolv2/pdm)
+
+* Merged: none
+* New Issues: none
+
+==== New PRs Opened
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/pdm/pull/37[#37]
+|R27-pixel
+a|*Feat/prometheus grafana integration*
+
+* Draft, not ready for review. Prometheus + Grafana as native systemd user
+  services managed from PDM (no Docker, no root), with a monitoring view.
+* R27-pixel will split it into three PRs: Prometheus integration, Grafana
+  integration, then service management + UI; this draft stays as reference.
+|===
+
+==== Open PRs awaiting review
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/pdm/pull/34[#34]
+|R27-pixel
+a|*feat: add P2Poolv2 systemd service controls*
+
+* Open, carried over. No new activity since 2026-09-27; still waiting on
+  maintainer review.
+
+|https://github.com/p2poolv2/pdm/pull/35[#35]
+|R27-pixel
+a|*(WIP)- P2poolv2 memory/storage usage view*
+
+* Draft, carried over. Merged main in on 2026-10-18; otherwise waiting on
+  #34.
+|===
+
+==== Open issues carried over
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/pdm/issues/36[#36]
+|R27-pixel
+a|*P2Poolv2 installation and systemd setup*
+
+* R27-pixel's question on scope still unanswered.
+|===
+
+=== Blocked
+
+* {empty}
+
+== Discussion Notes
+
+* {empty}
+
+== Decisions
+
+* {empty}
+
+== Action Items
+
+[cols="2,6,2"]
+|===
+|Owner |Task |Due
+
+|
+|
+|
+|===
+
+== Next Call
+
+* Date: 2026-10-29 (Thu)
+* Topics to carry forward:
+** {empty}
