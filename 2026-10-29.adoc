@@ -1,0 +1,394 @@
+= Weekly Call – 2026-10-29 (Thu)
+:project: p2poolv2
+:tags: weekly
+:attendees:
+
+== Agenda
+
+* [ ] Next release: #734 (uncle work in chain work) needs another chain
+      reset. What else will go in - #731/#732 ansible changes, #730
+      libzmq fix and electrum api.
+
+== Updates
+
+=== In Progress
+
+* {empty}
+
+// gh --repo p2poolv2/p2poolv2 pr list --state merged --search "merged:>=2026-10-22" --json number,title,author,mergedAt | jq -r '.[] | [(.number|tostring), .title, .author.login, .mergedAt] | @csv'
+=== Merged
+
+* No release this week; latest is still v0.16.2.
+
+==== Share chain work
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/734[#734]
+|pool2win
+a|*Count uncle share work in sharechain work*
+
+* Chain work now includes uncle work – without it uncles don't make the
+  chain stronger, which was the point of including them. Closes #601.
+* New rule: an uncle referenced from any ancestor can't be referenced again
+  as an uncle. Header sync requires uncles to be received and validated for
+  position and work.
+* Consensus change: no fork mechanism used, the chain will be reset
+  again. The reason is this is a fundamental enough rule and I didn't
+  want to add fork rules at this level.
+|===
+
+==== Monitoring / Ansible
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/628[#628]
+|Juwon-Ogunseye
+a|*Adds a native Ansible role for deploying Grafana + Prometheus, and adds Arch Linux support to the nginx role.*
+
+* Was open last week, now merged. Native (non-Docker) Prometheus + Grafana
+  role deploying the existing dashboards and provisioning; nginx role made
+  distro-agnostic for Arch.
+
+|https://github.com/p2poolv2/p2poolv2/pull/731[#731]
+|pool2win
+a|*Ansible grafana support*
+
+* Fixes the ansible automation so node deployment/updates are automated
+  instead of manual steps. Only for pool2win's Arch-based local nodes.
+
+|https://github.com/p2poolv2/p2poolv2/pull/732[#732]
+|pool2win
+a|*ansible: keep provisioned datasource only*
+
+* Public Ubuntu node was showing stale dashboards (manual deployment). Makes
+  ansible work for it; only change is a default datasource.
+* Some duplicate data for a day while Grafana keeps the old datasource.
+  Closes #599.
+|===
+
+==== Build / CI
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/718[#718]
+|stevenroose
+a|*Add flake-based nix devShell*
+
+* Was open last week, now merged. msgilligan approved after testing on
+  aarch64-darwin and aarch64-linux; adevries17 tested on x86_64-linux.
+* pool2win rebased it over the security advisory and ubuntu-26 CI fixes
+  before merging. #701 now rebased on top.
+
+|https://github.com/p2poolv2/p2poolv2/pull/727[#727]
+|pool2win
+a|*Fix segv error on codecov under ubuntu-26*
+
+* GitHub CI runners moved to ubuntu-26 and the instrumented codecov run
+  segfaulted in zmq; non-instrumented tests passed on 24 and 26. Pinned the
+  coverage job back to ubuntu-24 for now.
+
+|https://github.com/p2poolv2/p2poolv2/pull/730[#730]
+|pool2win
+a|*build: fix vendored libzmq SIGSEGV on AVX-default compilers*
+
+* Root cause: vendored libzmq is built without `HAVE_POSIX_MEMALIGN`, so
+  64-byte aligned structs got 16-byte aligned malloc chunks; GCC 15 on
+  Ubuntu 26.04 targets x86-64-v3 and emits 32-byte aligned stores, crashing
+  on first connect.
+* Defines `HAVE_POSIX_MEMALIGN` and `ZMQ_CACHELINE_SIZE` via per-target
+  CXXFLAGS; coverage job unpinned from ubuntu-24.04 again.
+
+|https://github.com/p2poolv2/p2poolv2/pull/729[#729]
+|msgilligan
+a|*GHA Workflows: use explicit ubuntu-26.04 runners over ubuntu-latest*
+
+* Replaces `ubuntu-latest` with `ubuntu-26.04` so OS upgrades happen when we
+  choose (prompted by the ubuntu-26 surprise above). Also moves the arm
+  docker runner to `ubuntu-26.04-arm` to match x86_64.
+|===
+
+==== Dependencies PRs
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/726[#726]
+|pool2win
+a|*Fix tokio security advisory from cargo deny*
+
+* Bumps tokio in `Cargo.toml`/`Cargo.lock` for a cargo-deny advisory.
+
+|https://github.com/p2poolv2/p2poolv2/pull/728[#728]
+|dependabot
+a|*deps: bump the cargo-minor-patch group across 1 directory with 2 updates*
+
+* serde_json 1.0.154, tokio-util 0.7.20 (replaces #710).
+
+|https://github.com/p2poolv2/p2poolv2/pull/706[#706]
+|dependabot
+a|*ci: bump taiki-e/install-action from 2.87.22 to 2.87.29 in the actions group across 1 directory*
+
+* Was open last week, now merged. taiki-e/install-action 2.87.29.
+|===
+
+=== New PRs Opened
+
+==== Wallet
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/724[#724]
+|PraneethGunas
+a|*Add wallet CLI skeleton*
+
+* Draft. `p2pool-wallet` CLI (behind a `cli` feature in the wallet crate)
+  that parses commands only: descriptor wallet on BDK, P2Pool Electrum
+  indexer, SQLite. HAL-style object/action commands (`wallet import`,
+  `address new`, `tx build`, `psbt sign`, ...), close to BDK CLI.
+* pool2win: PR is getting too big, split it into one PR per issue.
+  PraneethGunas opened tracking issue #733 for that; draft shared on Matrix.
+|===
+
+==== Testing
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/721[#721]
+|Juwon-Ogunseye
+a|*Add cargo-fuzz harness for RawMessage::consensus_decode*
+
+* Open. Part of #661. cargo-fuzz target for raw P2P wire messages; the
+  harness computes the real checksum so fuzz input gets past the checksum
+  check into `Message::consensus_decode`.
+* 60s local run: 512k executions, 697 code paths, no crashes; longer
+  3-hour runs planned.
+* pool2win reviewed: rebase on latest `main` (branch is off a very old
+  commit); fuzz crate version `0.0.0` → `0.0.1`?; will each fuzz target add
+  a bin target – could one bin run all targets?; is this a smoke test, and
+  if so say so in comments. Waiting on Juwon-Ogunseye.
+|===
+
+==== Nix
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/725[#725]
+|msgilligan
+a|*WIP: Branch for testing p2pool Nix service*
+
+* Draft, not for merge. Copy of #701 plus a `config-testnet4.toml`; runs
+  p2poolv2 as a systemd service on NixOS in a NixOS container (see
+  msgilligan/p2pool-nixos-containers). Early WIP for Nix-savvy testers.
+|===
+
+==== Dashboard
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/723[#723]
+|CyberAshven
+a|*Rust/WASM interactive dashboard (Leptos) + /hashrate, /found_blocks*
+
+* Draft, closed the same day without comment. New `p2poolv2_web` Leptos
+  WASM crate (live hashrate, shares, found blocks, miner lookup) plus
+  `/hashrate` and `/found_blocks` API endpoints; was to be rebased onto a
+  server-rendered dashboard PR ("PR #8, dashv1") elsewhere.
+* Was probably accidentally opened on our repo. There's a bcash
+  p2poolv2 effort building on our work. 
+|===
+
+==== Open PRs awaiting review
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/pull/701[#701]
+|adevries17
+a|*Nix Flake*
+
+* Open, carried over. Rebased on top of merged #718 (now adds the package
+  derivations); added llvm-tools so `cargo llvm-cov` works in the devShell.
+  Needs re-review.
+|===
+
+=== New Issues
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/issues/733[#733]
+|PraneethGunas
+a|*Tracking issue P2Poolv2 wallet and wallet-cli*
+
+* CLI sharecoin wallet: watch-only descriptors, addresses, balances and
+  history, build/sign/submit txs. Out of the #724 split request.
+* Sub-items: #649 (watch-only wallets), P2Pool address APIs, CLI commands,
+  discovery/sync, sharecoin maturity and expiry, #650 (balances/history),
+  #651 (tx build/sign/submit), #656 (Electrum API). Related: #648.
+
+|https://github.com/p2poolv2/p2poolv2/issues/722[#722]
+|pool2win
+a|*Track coinbase root height as value is accounted for in txs*
+
+* Today every output gets the oldest input's height, so mixing an old share
+  with a fresh one expires all outputs early (hurts share trading). Per
+  stevenroose's suggestion, track the height per output, like value.
+* Rules: coinbase outputs get the share's height; value may move to a lower
+  height, never a higher one; fee comes from the oldest value; outputs
+  expire below `H - PAYOUT_DEPTH`; coinbase maturity unchanged.
+* Validation: sort inputs/outputs by height, cover each output from the
+  highest remaining inputs.
+* Open: explicit field in the serialized output (breaks Bitcoin tx format,
+  sighash, PSBT, Electrum) vs deriving it with a fixed oldest-first flow.
+|===
+
+==== Closed in this window
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/p2poolv2/issues/601[#601]
+|pool2win
+a|*Total chain work should include uncle work*
+
+* Done in #734.
+
+|https://github.com/p2poolv2/p2poolv2/issues/599[#599]
+|pool2win
+a|*Add ansible support for prom/grafana setup*
+
+* Done in #628, #731, #732; in the next release.
+
+|https://github.com/p2poolv2/p2poolv2/issues/717[#717]
+|pool2win
+a|*Add DNS seeds for easier setup by users*
+
+* Was open last week, now closed: done in v0.16.2 (#719).
+
+|https://github.com/p2poolv2/p2poolv2/issues/553[#553]
+|pool2win
+a|*Run performance testing for sync to catch low hanging fruit*
+
+* Closed: some libp2p config tweaks possible, but our code handles
+  concurrency well enough. Revisit if sync slows when the chain reaches the
+  prune depth (210,960 blocks).
+|===
+
+=== Discussions
+
+* No new or updated discussions
+
+=== PDM (p2poolv2/pdm)
+
+* Merged: none
+* New PRs Opened: none
+
+==== New Issues
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/pdm/issues/38[#38]
+|Rasesh2005
+a|*Update p2poolv2_config dependency so pdm can load configs from P2Poolv2 v0.16*
+
+* pdm can't load a v0.16.2 node config (`missing field dial_peers` /
+  `difficulty_multiplier`): `p2poolv2_config` is a git dep with no rev, and
+  `Cargo.lock` pins a 2026-04-27 commit. The config editor still writes the
+  removed `difficulty_multiplier`.
+* Proposed fix: bump the dep, drop `difficulty_multiplier`, keep
+  `dial_peers` editable, update snapshots, add a test loading the current
+  `config.sample.toml`. Rasesh2005 wants to work on it.
+* Question for maintainers: pin to a release tag (e.g. `v0.16.2`) and bump
+  per release, or follow `main`? No reply yet.
+|===
+
+==== Open PRs awaiting review
+
+[cols="1,2,8"]
+|===
+|PR |Author |Title / description
+
+|https://github.com/p2poolv2/pdm/pull/34[#34]
+|R27-pixel
+a|*feat: add P2Poolv2 systemd service controls*
+
+* Open, carried over. No activity since 2026-09-27; still waiting on
+  maintainer review.
+
+|https://github.com/p2poolv2/pdm/pull/35[#35]
+|R27-pixel
+a|*(WIP)- P2poolv2 memory/storage usage view*
+
+* Draft, carried over. Touched 2026-10-25 but no new commits or comments;
+  still waiting on #34.
+
+|https://github.com/p2poolv2/pdm/pull/37[#37]
+|R27-pixel
+a|*Feat/prometheus grafana integration*
+
+* Draft, carried over. No new activity; R27-pixel planned to split it into
+  three PRs.
+|===
+
+==== Open issues carried over
+
+[cols="1,2,8"]
+|===
+|Issue |Author |Title / description
+
+|https://github.com/p2poolv2/pdm/issues/36[#36]
+|R27-pixel
+a|*P2Poolv2 installation and systemd setup*
+
+* R27-pixel's question on scope (2026-09-27) still unanswered.
+|===
+
+=== Blocked
+
+* {empty}
+
+== Discussion Notes
+
+* {empty}
+
+== Decisions
+
+* {empty}
+
+== Action Items
+
+[cols="2,6,2"]
+|===
+|Owner |Task |Due
+
+|
+|
+|
+|===
+
+== Next Call
+
+* Date: 2026-11-05 (Thu)
+* Topics to carry forward:
+** {empty}
