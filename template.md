@@ -1,4 +1,4 @@
-# Weekly Call – YYYY-MM-DD (Thu)
+# Weekly Call – YYYY-MM-DD 5PM UTC (Thu)
 
 - **Project:** p2poolv2
 - **Tags:** weekly
