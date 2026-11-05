@@ -85,7 +85,7 @@ day), including the release PR itself.
   - Only changes users, miners or node operators will notice. Leave out
     CI, tests, fuzzing and dependency bumps unless they fix a security
     advisory.
-  - Prefix an area with `**new** ` if any of its PRs merged since `S`, and
+  - Prefix an area with `🆕 ` if any of its PRs merged since `S`, and
     list those areas first.
   - `Chain reset needed:` `yes – <link>` if any listed PR changes consensus
     or forces a sharechain reset (check the previous notes and PR titles;

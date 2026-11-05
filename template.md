@@ -50,7 +50,7 @@ dropped. Not done items carry over to this call's Action Items.
 What the next release will bring, by area, one short note each. Only
 changes users, miners or node operators will notice; CI, test and
 dependency bumps are left out unless they fix a security advisory.
-Areas marked **new** changed since the last call; go through only
+Areas marked 🆕 changed since the last call; go through only
 those, the rest were covered on earlier calls.
 -->
 
@@ -61,7 +61,7 @@ those, the rest were covered on earlier calls.
 
 ### What's in it
 
-- **new** **Area:** very brief note on the change.
+- 🆕 **Area:** very brief note on the change.
 
 ## What's on Your Mind
 
