@@ -27,8 +27,7 @@ How the call works
 ## Agenda
 
 - [ ] Last week's action items (5 min)
-- [ ] Open questions and comments (10 min)
-- [ ] Waiting more than a week for an answer (5 min)
+- [ ] What's on your mind (10 min)
 - [ ] Anyone working on something who wants input (10 min)
 - [ ] Topic of the week (20 min)
 - [ ] Wrap-up – what goes to GitHub, action items, next topic (5 min)
@@ -44,7 +43,7 @@ dropped. Not done items carry over to this call's Action Items.
 |-------|------|--------|
 |       |      |        |
 
-## Open Questions and Comments
+## What's on Your Mind
 
 <!--
 One or two minutes each: something you're curious about, stuck on, have

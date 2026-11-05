@@ -83,7 +83,7 @@ themselves before the call.
     matching repo. Label dependabot as `dependabot`.
   - An empty list is `- none`.
   - Update the `gh` command in the section's comment to use `merged:>=S`.
-- Leave TL;DR, Open Questions and Comments, Input Wanted outcomes, Take to GitHub
+- Leave TL;DR, What's on Your Mind, Input Wanted outcomes, Take to GitHub
   and Action Items for the call. Don't invent attendees, discussion or outcomes.
 - Preserve anything the user already wrote in the file; merge, don't clobber.
 
