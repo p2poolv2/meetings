@@ -23,7 +23,8 @@ Meeting date: `$ARGUMENTS` if given, otherwise today (`date +%F`). The file is
   - its Next Call topic of the week and facilitator → this file's
     **Topic of the Week** heading and **Facilitator** line;
   - its Next Call carry-forward items and any still-open `[ ]` items →
-    **Input Wanted** if they fit there. Otherwise leave them out and list
+    **Next Release** if they're about the release, **Input Wanted** if they
+    fit there. Otherwise leave them out and list
     them in the report so the user can place them.
 - Also read any in-person / non-weekly notes in the window and mention issues
   created from them in the report.
@@ -53,6 +54,19 @@ under Merged.
 You don't need to read PR/issue bodies or comments: attendees read the items
 themselves before the call.
 
+### Next release
+
+Find the last p2poolv2 release and everything merged since it:
+
+```sh
+gh -R p2poolv2/p2poolv2 release list -L 1 --json tagName,publishedAt
+gh -R p2poolv2/p2poolv2 pr list --state merged --search "merged:>=<release date>" -L 200 \
+  --json number,title,author,mergedAt
+```
+
+Drop PRs merged before the release's `publishedAt` time (the search is by
+day), including the release PR itself.
+
 ## 3. Write the file
 
 - If `<date>.md` doesn't exist, copy `template.md` to it.
@@ -60,6 +74,25 @@ themselves before the call.
   Call date one week later. Leave Attendees and Note-taker empty.
 - Keep the template's Agenda, section order, and `<!-- -->` comments as they
   are.
+- Fill **Next Release**:
+  - `Last release:` tag and date.
+  - Under `### What's in it`, group the merged PRs by area (e.g.
+    Sharechain, Electrum API, Wallet, Hydrapool, Monitoring, Docker, Nix,
+    Build, Security) and write one bullet per area:
+    `- **Area:** very brief note on the change.` A few words, no PR links,
+    numbers or authors – those are in Since Last Call. Read a PR body only
+    if the title doesn't tell you what changed.
+  - Only changes users, miners or node operators will notice. Leave out
+    CI, tests, fuzzing and dependency bumps unless they fix a security
+    advisory.
+  - Prefix an area with `**new** ` if any of its PRs merged since `S`, and
+    list those areas first.
+  - `Chain reset needed:` `yes – <link>` if any listed PR changes consensus
+    or forces a sharechain reset (check the previous notes and PR titles;
+    read the PR body if unsure), else `no`. Carry it forward from the
+    previous notes until a release ships.
+  - Carry `Still to go in:` items forward from the previous notes, dropping
+    ones now merged. If a release shipped since `S`, start fresh.
 - Fill **Since Last Call**. Every item is one line: link with number, title,
   author handle in parentheses. No descriptions, summaries, or dates.
 

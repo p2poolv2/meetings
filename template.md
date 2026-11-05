@@ -27,6 +27,7 @@ How the call works
 ## Agenda
 
 - [ ] Last week's action items (5 min)
+- [ ] Next release – what's new this week (5 min)
 - [ ] What's on your mind (10 min)
 - [ ] Anyone working on something who wants input (10 min)
 - [ ] Topic of the week (20 min)
@@ -42,6 +43,25 @@ dropped. Not done items carry over to this call's Action Items.
 | Owner | Task | Status |
 |-------|------|--------|
 |       |      |        |
+
+## Next Release
+
+<!--
+What the next release will bring, by area, one short note each. Only
+changes users, miners or node operators will notice; CI, test and
+dependency bumps are left out unless they fix a security advisory.
+Areas marked **new** changed since the last call; go through only
+those, the rest were covered on earlier calls.
+-->
+
+- **Last release:** vX.Y.Z (YYYY-MM-DD)
+- **Chain reset needed:** no
+- **Still to go in:**
+  -
+
+### What's in it
+
+- **new** **Area:** very brief note on the change.
 
 ## What's on Your Mind
 
@@ -89,13 +109,13 @@ Open discussion: 15min
 
 <!--
 Proposals and outcomes from the call that need to be written up and
-decided on GitHub. Someone posts each one after the call.
-Consensus / chain design: the lead decides there, with reasoning.
+decided on GitHub. Someone posts each one on github after the call.
 -->
 
-| What | Where | Posted by |
-|------|-------|-----------|
-|      |       |           |
+| What | To Be Posted by |
+|------|-----------------|
+|      |                 |
+
 
 ## Action Items
 
